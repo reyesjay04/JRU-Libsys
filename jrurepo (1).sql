@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 20, 2022 at 10:26 AM
+-- Generation Time: Nov 20, 2022 at 01:52 PM
 -- Server version: 10.4.13-MariaDB
 -- PHP Version: 7.4.7
 
@@ -59,6 +59,7 @@ DROP TABLE IF EXISTS `articles`;
 CREATE TABLE IF NOT EXISTS `articles` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(100) NOT NULL,
+  `dept_code` varchar(10) NOT NULL,
   `cat_code` varchar(10) NOT NULL,
   `content` text NOT NULL,
   `file` varchar(100) NOT NULL,
@@ -74,9 +75,9 @@ CREATE TABLE IF NOT EXISTS `articles` (
 -- Dumping data for table `articles`
 --
 
-INSERT INTO `articles` (`id`, `title`, `cat_code`, `content`, `file`, `availability`, `view_count`, `created_at`, `updated_at`, `status`) VALUES
-(1, 'Article Sample', 'MT', 'Article Sample', '1', 'PUB', 10, '2022-11-20 17:20:39', '2022-11-20 17:20:39', 'Y'),
-(2, 'Article 2', 'MT', 'Article Sample 2', '1', 'PUB', 10, '2022-11-20 17:21:20', '2022-11-20 17:21:20', 'N');
+INSERT INTO `articles` (`id`, `title`, `dept_code`, `cat_code`, `content`, `file`, `availability`, `view_count`, `created_at`, `updated_at`, `status`) VALUES
+(1, 'Article Sample', 'AEP', 'MT', 'Article Sample', '1', 'PUB', 10, '2022-11-20 17:20:39', '2022-11-20 17:20:39', 'Y'),
+(2, 'Article 2', 'BAA', 'MT', 'Article Sample 2', '1', 'PUB', 20, '2022-11-20 17:21:20', '2022-11-20 17:21:20', 'Y');
 
 -- --------------------------------------------------------
 
@@ -90,7 +91,7 @@ CREATE TABLE IF NOT EXISTS `author_list` (
   `art_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `author_list`
@@ -98,7 +99,8 @@ CREATE TABLE IF NOT EXISTS `author_list` (
 
 INSERT INTO `author_list` (`id`, `art_id`, `user_id`) VALUES
 (1, 1, 2),
-(2, 1, 3);
+(2, 1, 3),
+(3, 2, 2);
 
 -- --------------------------------------------------------
 
@@ -174,7 +176,7 @@ CREATE TABLE IF NOT EXISTS `comments` (
 DROP TABLE IF EXISTS `course`;
 CREATE TABLE IF NOT EXISTS `course` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `dept_id` int(11) NOT NULL,
+  `dept_code` varchar(20) NOT NULL,
   `code` varchar(10) NOT NULL,
   `course` varchar(100) NOT NULL,
   `created_by` varchar(50) NOT NULL,
@@ -184,14 +186,16 @@ CREATE TABLE IF NOT EXISTS `course` (
   `status` varchar(1) NOT NULL DEFAULT 'Y',
   PRIMARY KEY (`id`),
   UNIQUE KEY `code` (`code`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `course`
 --
 
-INSERT INTO `course` (`id`, `dept_id`, `code`, `course`, `created_by`, `created_at`, `updated_by`, `updated_at`, `status`) VALUES
-(1, 1, 'IT', 'IT', 'admin', '2022-11-20 12:55:39', 'admin', '2022-11-20 15:17:28', 'Y');
+INSERT INTO `course` (`id`, `dept_code`, `code`, `course`, `created_by`, `created_at`, `updated_by`, `updated_at`, `status`) VALUES
+(1, 'AEP', 'AB', 'Bachelor of Arts', 'admin', '2022-11-20 12:55:39', 'admin', '2022-11-20 15:17:28', 'Y'),
+(5, 'BAA', 'BSA', 'Bachelor of Science in Accountancy', 'admin', '2022-11-20 19:43:37', 'admin', '2022-11-20 19:43:37', 'Y'),
+(6, 'AEP', 'BSPsy', 'Bachelor of Science in Psychology', 'admin', '2022-11-20 20:22:12', '', '0000-00-00 00:00:00', 'Y');
 
 -- --------------------------------------------------------
 
@@ -211,14 +215,17 @@ CREATE TABLE IF NOT EXISTS `department` (
   `status` varchar(1) NOT NULL DEFAULT 'Y',
   PRIMARY KEY (`id`),
   UNIQUE KEY `code` (`code`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `department`
 --
 
 INSERT INTO `department` (`id`, `code`, `name`, `created_at`, `created_by`, `updated_at`, `updated_by`, `status`) VALUES
-(1, 'AEP', 'PROGRAMS UNDER THE COLLEGE OF LIBERAL ARTS, EDUCATION, & PSYCHOLOGY', '2022-11-20 17:22:32', '2', '2022-11-20 17:22:32', '2', 'Y');
+(1, 'AEP', 'PROGRAMS UNDER THE COLLEGE OF LIBERAL ARTS, EDUCATION, & PSYCHOLOGY', '2022-11-20 17:22:32', 'admin', '2022-11-20 20:07:22', 'admin', 'Y'),
+(2, 'BAA', 'PROGRAMS UNDER THE COLLEGE OF BUSINESS ADMINISTRATION & ACCOUNTANCY', '2022-11-20 19:42:50', 'admin', '2022-11-20 19:42:50', 'admin', 'Y'),
+(3, 'CSE', 'PROGRAMS UNDER THE COLLEGE OF COMPUTER STUDIES & ENGINEERING', '2022-11-20 19:54:13', 'admin', '0000-00-00 00:00:00', '', 'Y'),
+(9, 'AED', 'AED', '2022-11-20 20:09:51', 'admin', '0000-00-00 00:00:00', '', 'Y');
 
 -- --------------------------------------------------------
 
@@ -233,7 +240,15 @@ CREATE TABLE IF NOT EXISTS `dislikes` (
   `user_id` int(11) NOT NULL,
   `created_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `dislikes`
+--
+
+INSERT INTO `dislikes` (`id`, `article_id`, `user_id`, `created_at`) VALUES
+(1, 1, 2, '2022-11-20 18:29:58'),
+(2, 2, 3, '2022-11-20 18:32:46');
 
 -- --------------------------------------------------------
 
@@ -248,15 +263,16 @@ CREATE TABLE IF NOT EXISTS `no_likes` (
   `user_id` int(11) NOT NULL,
   `created_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `no_likes`
 --
 
 INSERT INTO `no_likes` (`id`, `article_id`, `user_id`, `created_at`) VALUES
-(1, 1, 1, '2022-11-20 17:24:09'),
-(2, 1, 2, '2022-11-20 17:24:09');
+(1, 1, 3, '2022-11-20 17:24:09'),
+(2, 1, 2, '2022-11-20 17:24:09'),
+(3, 1, 2, '2022-11-20 18:26:12');
 
 -- --------------------------------------------------------
 
@@ -266,13 +282,22 @@ INSERT INTO `no_likes` (`id`, `article_id`, `user_id`, `created_at`) VALUES
 
 DROP TABLE IF EXISTS `ratings`;
 CREATE TABLE IF NOT EXISTS `ratings` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `article_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `rate_val` int(11) NOT NULL,
   `rate_base` int(1) NOT NULL DEFAULT 5,
-  `created_at` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `created_at` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `ratings`
+--
+
+INSERT INTO `ratings` (`id`, `article_id`, `user_id`, `rate_val`, `rate_base`, `created_at`) VALUES
+(1, 1, 2, 3, 5, '2022-11-20 18:37:23'),
+(2, 1, 2, 2, 5, '2022-11-20 18:37:23');
 
 -- --------------------------------------------------------
 
