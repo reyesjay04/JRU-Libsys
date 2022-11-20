@@ -4,10 +4,18 @@
 include_once '../../res/functions.php';
 
 $result = GetCourseDetails($_POST['id']);
-
-
+$res = GetDepartments();
 ?>
 <input type="hidden" name="id" class="form-control" autocomplete="off" value="<?php echo $result['id']?>" required>
+<div class="row">
+    <div class="col-md-12">
+        <div class="form-group">
+            <select class="form-control" name="dept" id="dept_edit" >
+               
+            </select>
+        </div>
+    </div>
+</div>
 <div class="row">
     <div class="col-md-12">
         <div class="form-group">

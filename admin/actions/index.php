@@ -40,7 +40,26 @@ if(isset($_GET['login'])) {
 
     include 'deletecourse.php';
 
+} else if(isset($_GET['getdeptdata']))  { 
+
+    include 'getdeptmodaldata.php';
+
+} else if(isset($_GET['adddept']))  { 
+
+    include 'adddepartment.php';
+
+} else if(isset($_GET['updatedept']))  { 
+
+    include 'updatedepartment.php';
+
+}  else if(isset($_GET['getdept']))  { 
+
+    include 'getdept.php';
+
 }
+
+
+
 
 
 

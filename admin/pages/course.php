@@ -52,6 +52,7 @@
                       <table id="course" class="table table-striped table-bordered dt-responsive" style="width:100%">
                         <thead>
                           <tr>
+                            <th>Department</th>
                             <th>Code</th>
                             <th>Course</th>
                             <th>Created By</th>
@@ -62,6 +63,7 @@
                         </thead>
                         <tfoot>
                           <tr>
+                            <th>Department</th>
                             <th>Code</th>
                             <th>Course</th>
                             <th>Created By</th>
@@ -88,8 +90,10 @@
 <?php include 'modals/add-course-modal.php';?>
 <?php include 'modals/edit-course-modal.php';?>
 <script>
+
 $( document ).ready(function() {
   LoadDatatable();
+  LoadDepartments();
 });
 
 function LoadDatatable() {
@@ -132,14 +136,28 @@ function editcourse(id) {
     method:"post",  
     data:{id:id},  
     success:function(data){  
-      $('#course-detail').html(data);  
+      $('#course-detail').html(data);      
       $('#modal-edit-course').modal("show");
     }
 
     });
 }
 
-
+function LoadDepartments() {
+    $.ajax({
+      url: 'actions/?getdept',
+      dataType: 'json',
+      success:function(response){     
+        $("#dept").empty();
+        var len = response.length;
+        for( var i = 0; i<len; i++){
+            var code = response[i]['Code'];
+            var name = response[i]['Name']; 
+            $("#dept").append("<option value='"+code+"'>"+name+"</option>");           
+        }
+      }
+    });
+}
 
 </script>
 </body>

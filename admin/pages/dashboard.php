@@ -127,54 +127,42 @@
             <div class="tab-content" id="custom-content-below-tabContent">
               <div class="tab-pane fade show active" id="custom-content-below-home" role="tabpanel" aria-labelledby="custom-content-below-home-tab">      
                 <div class="card-body">
-                <div class="row">
-                    <div class="col-sm-6">
-                      <!-- select -->
-                      <div class="form-group">
-                        <label>Select</label>
-                        <select class="form-control">
-                          <option>option 1</option>
-                          <option>option 2</option>
-                          <option>option 3</option>
-                          <option>option 4</option>
-                          <option>option 5</option>
+                  <div class="row">
+
+                  <div class="form-group">
+                    <label>Filter by Department</label>
+                      <div class="input-group">
+                        <select class="form-control" id="dept">
                         </select>
-                      </div>
-                    </div>
-                    <div class="col-sm-6">
-                      <div class="form-group">
-                        <label>Select Disabled</label>
-                        <select class="form-control" disabled="">
-                          <option>option 1</option>
-                          <option>option 2</option>
-                          <option>option 3</option>
-                          <option>option 4</option>
-                          <option>option 5</option>
-                        </select>
-                      </div>
+                        <div class="input-group-prepend">
+                          <button type="button" id="1" onclick="SearchAuthor(this.id) ;" class="btn btn-block btn-secondary btn-flat">Search</button>          
+                        </div>
+                      </div>              
                     </div>
                   </div>
                   <div class="row">
                     <div class=col-md-12>
-                      <table id="categories" class="table table-striped table-bordered dt-responsive" style="width:100%">
+                      <table id="authors" class="table table-striped table-bordered dt-responsive" style="width:100%">
                         <thead>
                           <tr>
-                            <th>Code</th>
-                            <th>Category Name</th>
-                            <th>Created By</th>
-                            <th>Created At</th>
-                            <th>Status</th>    
-                            <th>Action</th>
+                            <th>Full Name</th>
+                            <th></th>
+                            <th>Total Articles</th>
+                            <th>Pending Post</th>
+                            <th>Total Likes</th>    
+                            <th>Total Dislikes</th>
+                            <th>View Count</th>
                           </tr>
                         </thead>
                         <tfoot>
                           <tr>
-                            <th>Code</th>
-                            <th>Category Name</th>
-                            <th>Created By</th>
-                            <th>Created At</th>
-                            <th>Status</th>    
-                            <th>Action</th>
+                            <th>Full Name</th>
+                            <th></th>
+                            <th>Total Articles</th>
+                            <th>Pending Post</th>
+                            <th>Total Likes</th>    
+                            <th>Total Dislikes</th>
+                            <th>View Count</th>
                           </tr>
                         </tfoot>
                       </table>
@@ -194,39 +182,60 @@
 
 <script>
 $( document ).ready(function() {
-  LoadDatatable();
+  LoadDatatable(0);
   LoadDepartments();
 });
 
-function LoadDatatable() {
-  $("#categories").DataTable({
+function LoadDatatable(id) {
+  var filter = "";
+  if(id == 0) {
+    filter = "All";
+  } else {
+    filter = $("#dept").val();
+  }
+  console.log(filter);
+  $("#authors").DataTable({
     "responsive": true,
     "autoWidth": false,
     "processing": true,
     "serverSide": true,
     "destroy" : true,
-    "ajax": "dtserver/getcategories.php",
+    "ajax": "dtserver/getauthorsummary.php?filter="+filter,
     "columnDefs": [
-      { "width": "5%", "targets":4 }, { "width": "5%", "targets":5 }
+      {
+        render: function (data, type, row) {
+            return row[0] + ' ' + row[1];
+        },
+        targets: 0,
+      },
+      { visible: false, targets: [1] },
+      { "width": "5%", "targets":4 }, 
+      { "width": "5%", "targets":5 },
+
     ]
 
   });
 }
+function SearchAuthor(id){
+  $("#authors").empty();
+  LoadDatatable(id);
+}
 function LoadDepartments() {
     $.ajax({
-      url: 'dtserver/getdepartments.php',
+      url: 'actions/?getdept',
       dataType: 'json',
       success:function(response){     
         $("#dept").empty();
         $("#dept").append("<option value='All'>All</option>")
+        var len = response.length;
         for( var i = 0; i<len; i++){
-            var code = response[i]['code'];
-            var name = response[i]['name']; 
-            $("#dept").append("<option value='"+id+"'>"+name+"</option>");           
+            var code = response[i]['Code'];
+            var name = response[i]['Name']; 
+            $("#dept").append("<option value='"+code+"'>"+name+"</option>");           
         }
       }
     });
-  }
+}
 </script>
 </body>
 </html>

@@ -147,6 +147,18 @@
             </a>
           </li>
           <li class="nav-item">
+            <a href="?department" class="nav-link <?php 
+              if( $_SERVER['REQUEST_URI'] == $LIB_SYS_DIR.'admin/?department' ) {
+                echo 'active';
+              }
+            ?> ">
+              <i class="nav-icon fas fa-tree"></i>
+              <p>
+                Departments
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-edit"></i>
               <p>

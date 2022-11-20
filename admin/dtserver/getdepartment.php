@@ -1,21 +1,20 @@
 <?php
 
 // DB table to use
-$table = 'course';
+$table = 'department';
 // Table's primary key
 $primaryKey = 'id';
 // Array of database columns which should be read and sent back to DataTables.
 // The `db` parameter represents the column name in the database. 
 // The `dt` parameter represents the DataTables column identifier.
 $columns = array(
-    array('db' => 'dept_code', 'dt' => 0 ),
-    array('db' => 'code', 'dt' => 1 ),
-    array('db' => 'course', 'dt' => 2 ),
-    array('db' => 'created_by', 'dt' => 3 ),
-    array('db' => 'created_at', 'dt' => 4 ),
+    array('db' => 'code', 'dt' => 0 ),
+    array('db' => 'name', 'dt' => 1 ),
+    array('db' => 'created_by', 'dt' => 2 ),
+    array('db' => 'created_at', 'dt' => 3 ),
     array(
             'db' => 'status', 
-            'dt' => 5,
+            'dt' => 4,
             'formatter' => function( $d, $row ){
                 if ($d == "N") {
                     return ('<span data-toggle="tooltip"  title="" class="badge bg-red" data-original-title="Inactive"><i class="fas fa-minus-circle"></i></span>');
@@ -26,9 +25,9 @@ $columns = array(
         ),
     array(
             'db' => 'id', 
-            'dt' => 6,
+            'dt' => 5,
             'formatter' => function( $d, $row ){ 
-                return ('<div class="btn-group"><button type="button" class="btn btn-info bg-gr" id='.$d.' onclick="editcourse(this.id)"><i class="fas fa-edit"></i></button><button type="button" class="btn btn-danger" id='.$d.' onclick="deletecourse(this.id)"><i class="fas fa-trash"></i></i></button>');
+                return ('<div class="btn-group"><button type="button" class="btn btn-info bg-gr" id='.$d.' onclick="editdept(this.id)"><i class="fas fa-edit"></i></button><button type="button" class="btn btn-danger" id='.$d.' onclick="deletedept(this.id)"><i class="fas fa-trash"></i></i></button>');
             }
         )
 );
