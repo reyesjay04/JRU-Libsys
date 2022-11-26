@@ -1,14 +1,20 @@
 <?php session_start();
 date_default_timezone_set('Asia/Manila');
 
+include 'config.php';
+
+function ConnectionArray() {
+	return $dbDetails = array('host' => DB_HOST, 'user' => DB_USER, 'pass' => DB_PASSWORD, 'db' => DB_NAME);
+} 
 
 function FullDateFormat24HR() {
     return date("Y-m-d H:i:s");
 }
 
 function GetAdmin($user, $pass) {
-    include 'get-conn.php';
-    
+    require_once("connection.php");
+    $pdo = Database::getConnection();
+
     $newData = [];
 
     $stmt = $pdo->prepare("SELECT * FROM `admin` WHERE username = :username AND password = :password");
@@ -36,7 +42,8 @@ function GetAdmin($user, $pass) {
 }
 #region Categories
 function AddCategory($categoryName, $catcode) {
-    include 'get-conn.php';
+    require_once("connection.php");
+    $pdo = Database::getConnection();
 
     $newData = [
         "cat_code" => $catcode,
@@ -44,15 +51,18 @@ function AddCategory($categoryName, $catcode) {
         "created_by" => $_SESSION['ADMIN_USER'],
         "created_at" => FullDateFormat24HR(),
     ];
-
-    $sql = "INSERT INTO categories (`cat_code`, `cat_name`, `created_by`, `created_at`) VALUES (:cat_code, :cat_name, :created_by, :created_at)";
-    $stmt = $pdo->prepare($sql)->execute($newData);
-    $stmt->closeCursor();
-
+  
+    try {
+        $sql = "INSERT INTO categories (`cat_code`, `cat_name`, `created_by`, `created_at`) VALUES (:cat_code, :cat_name, :created_by, :created_at)";
+        $stmt = $pdo->prepare($sql)->execute($newData);
+    } catch (Exception $e) {
+        echo 'Caught exception: ',  $e->getMessage(), "\n";
+    }
 }
 
 function DeleteCategories($id) {
-    include 'get-conn.php';
+    require_once("connection.php");
+    $pdo = Database::getConnection();
 
     $sql = "DELETE FROM categories WHERE cat_id= :cat_id";
     $stmt= $pdo->prepare($sql);
@@ -60,12 +70,12 @@ function DeleteCategories($id) {
     $res = $stmt->rowCount();
     $stmt->closeCursor();
     return $res;
-
 }
 
 function GetCategoryDetails($id) {
-    include 'get-conn.php';
-    
+    require_once("connection.php");
+    $pdo = Database::getConnection();
+
     $newData = [];
 
     $stmt = $pdo->prepare("SELECT * FROM `categories` WHERE cat_id = :cat_id");
@@ -79,11 +89,11 @@ function GetCategoryDetails($id) {
     ];
     $stmt->closeCursor();
     return $newData;
-
 }
 
 function UpdateCategory($data) {
-    include 'get-conn.php';
+    require_once("connection.php");
+    $pdo = Database::getConnection();
 
     $data['updated_at'] = FullDateFormat24HR();  
     $data['updated_by'] = $_SESSION['ADMIN_USER'];  
@@ -94,13 +104,13 @@ function UpdateCategory($data) {
     $res = $stmt->rowCount();
     $stmt->closeCursor();
     return $res;
-
 }
 #region
 
 #region Users
 function DeleteUser($id) {
-    include 'get-conn.php';
+    require_once("connection.php");
+    $pdo = Database::getConnection();
 
     $sql = "DELETE FROM users WHERE id= :id";
     $stmt= $pdo->prepare($sql);
@@ -115,7 +125,8 @@ function DeleteUser($id) {
 #region Course
 
 function AddCourse($course, $code, $dept) {
-    include 'get-conn.php';
+    require_once("connection.php");
+    $pdo = Database::getConnection();
 
     $newData = [
         "dept_code" => $dept,
@@ -124,15 +135,19 @@ function AddCourse($course, $code, $dept) {
         "created_by" => $_SESSION['ADMIN_USER'],
         "created_at" => FullDateFormat24HR(),
     ];
-
-    $sql = "INSERT INTO course (`dept_code`,`code`, `course`, `created_by`, `created_at`) VALUES (:dept_code, :code, :course, :created_by, :created_at)";
-    $stmt = $pdo->prepare($sql)->execute($newData);
-    $stmt->closeCursor();
+    try {
+        $sql = "INSERT INTO course (`dept_code`,`code`, `course`, `created_by`, `created_at`) VALUES (:dept_code, :code, :course, :created_by, :created_at)";
+        $stmt = $pdo->prepare($sql)->execute($newData);
+    } catch (Exception $e) {
+        echo 'Caught exception: ',  $e->getMessage(), "\n";
+    }
+   
 }
 
 function GetCourseDetails($id) {
-    include 'get-conn.php';
-    
+    require_once("connection.php");
+    $pdo = Database::getConnection();
+
     $newData = [];
 
     $stmt = $pdo->prepare("SELECT * FROM `course` WHERE id = :id");
@@ -140,20 +155,40 @@ function GetCourseDetails($id) {
     $row = $stmt->fetch();
 
     $newData = [
+        "dept_code" => $row['dept_code'],
         "code" => $row['code'],
         "course" => $row['course'],
         "id" => $row['id'],
     ];
+
     $stmt->closeCursor();
     return $newData;
 
 }
 
-function UpdateCourse($data) {
-    include 'get-conn.php';
+function GetCourse($dept_code) {
+
+    require_once("connection.php");
+    $pdo = Database::getConnection();
+    $get_course = [];
+    $stmt = $pdo->prepare("SELECT `code`, `course` FROM course WHERE status = 'Y' AND dept_code = :dept_code");
+    $stmt->execute(["dept_code" => $dept_code]); 
+    while ($row = $stmt->fetch()) {
+        $code = $row['code'];
+        $name = $row['course'];
+        $get_course[] = array("Code" => $code, "Name" => $name);
+    }
+    $stmt->closeCursor();
+    return json_encode($get_course);
+}
+
+function UpdateCourse($data) { 
+    require_once("connection.php");
+    $pdo = Database::getConnection();
 
     $data['updated_at'] = FullDateFormat24HR();  
     $data['updated_by'] = $_SESSION['ADMIN_USER'];  
+
     try {
         $sql = "UPDATE `course` SET code = :code,  course = :course, updated_at = :updated_at, updated_by = :updated_by  WHERE id = :id";
         $stmt= $pdo->prepare($sql);
@@ -167,8 +202,9 @@ function UpdateCourse($data) {
 }
 
 function DeleteCourse($id) {
+    require_once("connection.php");
+    $pdo = Database::getConnection();
     
-
     $sql = "DELETE FROM course WHERE id= :id";
     $stmt= $pdo->prepare($sql);
     $stmt->execute(["id" => $id]);  
@@ -183,9 +219,11 @@ function DeleteCourse($id) {
 
 #region Departments
 function GetDepartments() {
-    include_once 'get-conn.php';
-
-    $stmt = $pdo->query("SELECT code, name FROM department WHERE status = 'Y'");
+    require_once("connection.php");
+    $pdo = Database::getConnection();
+    
+    $stmt = $pdo->prepare("SELECT code, name FROM department WHERE status = 'Y'");
+    $stmt->execute(); 
     while ($row = $stmt->fetch()) {
         $code = $row['code'];
         $name = $row['name'];
@@ -197,7 +235,8 @@ function GetDepartments() {
 
 
 function AddDepartment($code, $name) {
-    include 'get-conn.php';
+    require_once("connection.php");
+    $pdo = Database::getConnection();
 
     $newData = [
         "code" => $code,
@@ -217,7 +256,8 @@ function AddDepartment($code, $name) {
 }
 
 function GetDepartmentDetails($id) {
-    include 'get-conn.php';
+    require_once("connection.php");
+    $pdo = Database::getConnection();
     
     $newData = [];
 
@@ -235,7 +275,8 @@ function GetDepartmentDetails($id) {
 
 }
 function UpdateDepartment($data) {
-    include 'get-conn.php';
+    require_once("connection.php");
+    $pdo = Database::getConnection();
 
     $data['updated_at'] = FullDateFormat24HR();  
     $data['updated_by'] = $_SESSION['ADMIN_USER'];  
@@ -251,5 +292,47 @@ function UpdateDepartment($data) {
         echo 'Caught exception: ',  $e->getMessage(), "\n";
     }
 }
+
+function DeleteDepartment($id) {
+    require_once("connection.php");
+    $pdo = Database::getConnection();
+
+    $sql = "DELETE FROM department WHERE id= :id";
+    $stmt= $pdo->prepare($sql);
+    $stmt->execute(["id" => $id]);  
+    $res = $stmt->rowCount();
+    $stmt->closeCursor();
+    return $res;
+}
+#endregion
+
+#region UserConfig
+
+function UpdateStudentConfig($data) {
+    require_once("connection.php");
+    $pdo = Database::getConnection();
+
+    $data['modified'] = FullDateFormat24HR();  
+    $data['isconfig'] = "Y";  
+
+    try {
+        
+        $sql = "UPDATE `users` SET         
+                    `reference_id` = :reference_id, `first_name` = :first_name, `last_name` = :last_name, 
+                    `gender` = :gender, `course_code` = :course_code, 
+                    `department_code` = :department_code, `contact_number` = :contact_number, 
+                    `modified` = :modified, `isconfig` = :isconfig
+                WHERE oauth_uid = :oauth_uid";
+
+        $stmt= $pdo->prepare($sql);
+        $stmt->execute($data);  
+        $res = $stmt->rowCount();
+        $stmt->closeCursor();
+        return $res;
+    } catch (Exception $e) {
+        echo 'Caught exception: ',  $e->getMessage(), "\n";
+    }
+}
+
 #endregion
 ?>

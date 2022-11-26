@@ -8,8 +8,7 @@
       <li class="nav-item d-none d-sm-inline-block">
         <a href="?dashboard" class="nav-link">Home</a>
       </li>
-    </ul>
-
+    </ul>  
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
 
@@ -41,5 +40,27 @@
           <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
         </div>
       </li>
+      <li class="nav-item dropdown ">
+      <a class="nav-link" data-toggle="dropdown" href="#" aria-expanded="false">
+        <i class="far fa-user"></i>
+      </a>
+      <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right " style="left: inherit; right: 0px;">
+        <div class="dropdown-divider"></div>
+        <a href="#" class="dropdown-item">
+          <div class="media" onclick="profile();">
+            <img src="../dist/img/admin.png" alt="User Avatar" class="img-size-50 img-circle mr-3">
+            <div class="media-body">
+              <h3 class="dropdown-item-title">
+
+                <?php echo $_SESSION['FIRST_NAME'] . " " .  $_SESSION['LAST_NAME']?>
+              </h3>
+              <p class="text-sm">Admin</p>
+            </div>
+          </div>
+        </a>
+        <div class="dropdown-divider"></div>
+        <a href="#" onclick="logout()" class="dropdown-item dropdown-footer">Logout</a>
+      </div>
+    </li>
     </ul>
   </nav>

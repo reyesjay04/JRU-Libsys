@@ -1,41 +1,56 @@
-<?php session_start();
+<?php 
+header("Cache-Control: no-cache, must-revalidate");
 
-include 'res/config.php';
+require_once 'res/functions.php';   
 switch ($_SERVER['REQUEST_URI']) { 
     case $LIB_SYS_DIR."";
-        session_destroy();
-        if (isset($_SESSION['USER_LOGIN']) || isset($_SESSION['USER_EMAIL'])  || isset($_SESSION['USER_PROFILE']) ) {
-            echo 'next page';
-        } else {
+        if (isset($_SESSION['USER_LOGIN']) ) {
+            if ($_SESSION['USER_ROLE'] == "Students") {
+                header('Location: students');
+            } else {
+                header('Location: ecnt');
+            }        } else {
             include 'login.php';
         }       
     break;
     default:
         if (isset($_GET['code']) || isset($_GET['scope']) || isset($_GET['authuser']) == 1 || isset($_GET['prompt'])) {
-            include 'res/googleapi/google-auth.php';
-            $token = $client->fetchAccessTokenWithAuthCode($_GET['code']);
-            $client->setAccessToken($token['access_token']);      
 
-            $google_oauth = new Google_Service_Oauth2($client);
-            $google_account_info = $google_oauth->userinfo->get();
+            if (!isset($_SESSION['USER_LOGIN']) ) {
 
-            require_once 'res/get-conn.php';
-            require_once 'res/class/user.class.php'; 
-
-            $user = new User(); 
-            $userData = $user->checkUser($google_account_info); 
-
-            $_SESSION['USER_ROLE'] = $userData['user_role'];
-            $_SESSION['USER_EMAIL'] = $userData['email'];
-            $_SESSION['USER_FIRST'] = $userData['first_name'];
-            $_SESSION['USER_LAST'] = $userData['last_name'];
-
-            if ($_SESSION['USER_ROLE'] == "Students") {
-                header('Location: students');
-            } else {
-                header('Location: ecnt');
+                include 'res/googleapi/google-auth.php';
+                $token = $client->fetchAccessTokenWithAuthCode($_GET['code']);
+                $client->setAccessToken($token['access_token']);      
+    
+                $google_oauth = new Google_Service_Oauth2($client);
+                $google_account_info = $google_oauth->userinfo->get();
+       
+                require_once 'res/class/user.class.php'; 
+    
+                $user = new User(); 
+                $userData = $user->checkUser($google_account_info); 
+    
+                $_SESSION['USER_LOGIN'] = true;
+                $_SESSION['USER_AUTHID'] = $userData['oauth_uid'];
+                $_SESSION['USER_ROLE'] = $userData['user_role'];
+                $_SESSION['USER_EMAIL'] = $userData['email'];
+                $_SESSION['USER_FIRST'] = $userData['first_name'];
+                $_SESSION['USER_LAST'] = $userData['last_name'];
+                $_SESSION['USER_CONFIG'] = $userData['isconfig'];      
             }
                    
+            if ($_SESSION['USER_ROLE'] == "Students") {
+                echo "
+                <script>
+                    window.location.replace('http://localhost:8012/libsys/students');
+                </script>";
+            } else {
+                echo "
+                <script>
+                    window.location.replace('http://localhost:8012/libsys/ecnt');
+                </script>";
+            }
+            
         } else {
             include 'login.php';
         }

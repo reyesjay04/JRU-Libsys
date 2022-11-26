@@ -33,7 +33,9 @@ $columns = array(
 );
 // Include SQL query processing class
 require('../../res/ssp.class.php');
-require('../../res/get-conn.php');
+require('../../res/functions.php');
+
+
 // Output data as json format
 echo json_encode(
      SSP::simple( $_GET, ConnectionArray(), $table, $primaryKey, $columns)

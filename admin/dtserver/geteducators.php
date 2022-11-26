@@ -44,7 +44,8 @@ $extraWhere = "";
 
 // Include SQL query processing class
 require('../../res/ssp.customized.class.php' );
-require('../../res/get-conn.php');
+require('../../res/functions.php');
+
 
 $groupBy = "";
 $having = "";

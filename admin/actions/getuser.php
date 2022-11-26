@@ -1,10 +1,10 @@
 <?php 
 include_once '../../res/functions.php';
 
-$user = $_POST['username'];
-$pass = $_POST['password'];
+$admin_user = $_POST['username'];
+$admin_pass = $_POST['password'];
 
-$adDetails = GetAdmin($user, $pass);
+$adDetails = GetAdmin($admin_user, $admin_pass);
 
 
 if ($adDetails['STATUS'] == 1) {

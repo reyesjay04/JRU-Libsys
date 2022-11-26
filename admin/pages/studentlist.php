@@ -47,10 +47,13 @@
                           <thead>
                             <tr>
                               <th></th>
+                              <th>Student No.</th>
                               <th>First Name</th>
                               <th>Last Name</th>
                               <th>Email</th>    
+                              <th>Contact</th>    
                               <th>Gender</th>
+                              <th>Department</th>
                               <th>Course</th>
                               <th>Action</th>
                             </tr>
@@ -58,10 +61,13 @@
                           <tfoot>
                             <tr>
                               <th></th>
+                              <th>Student No.</th>
                               <th>First Name</th>
                               <th>Last Name</th>
                               <th>Email</th>    
+                              <th>Contact</th>
                               <th>Gender</th>
+                              <th>Department</th>
                               <th>Course</th>
                               <th>Action</th>
                             </tr>

@@ -56,6 +56,14 @@ if(isset($_GET['login'])) {
 
     include 'getdept.php';
 
+}  else if(isset($_GET['deletedept']))  { 
+
+    include 'deletedepartment.php';
+
+}  else if(isset($_GET['logout']))  { 
+
+    include 'logout.php';
+
 }
 
 

@@ -36,6 +36,7 @@ class User {
             $stmt = $this->pdo->prepare($checkQuery);
             $stmt->execute(['oauth_uid' => $data->id]); 
             $user = $stmt->fetchColumn();
+            $stmt->closeCursor();
 
             $newData = [
                 "oauth_uid" => $data->id,
@@ -47,10 +48,8 @@ class User {
                 "created_at" => date("Y-m-d H:i:s")
             ];
 
-            echo "<script>console.log('{$user}');</script>";
-
             if($user < 1){                 
-
+           
                 $newData['user_role'] = $userRole;  
                 $sql = "INSERT INTO $this->userTbl
                             (
@@ -70,7 +69,7 @@ class User {
                 $stmt->execute(['oauth_uid' => $data->id]); 
                 $row = $stmt->fetch();           
                 $newData['user_role'] = $row['user_role'];  
-
+                $newData['isconfig'] = $row['isconfig'];  
             }
              
             // Get user data from the database 

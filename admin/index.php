@@ -1,6 +1,6 @@
-<?php session_start();
+<?php
 
-include '../res/config.php';
+include '../res/functions.php';
 
 if(isset($_SESSION['ADMIN_USER'])) {
 
@@ -48,5 +48,17 @@ if(isset($_SESSION['ADMIN_USER'])) {
     include 'pages/login.php';
 }
 
-
 ?>
+
+<script>
+function logout() {
+    $.ajax({
+      url:"actions/?logout",
+      success:function(data){
+        window.location.replace('<?php echo $LIB_SYS_DIR?>admin/');
+
+      }
+
+    });
+}
+</script>
