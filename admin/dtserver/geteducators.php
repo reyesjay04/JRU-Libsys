@@ -38,8 +38,8 @@ $columns = array(
 );
 
 $joinQuery = "FROM users a
-INNER JOIN course b ON a.course_id = b.id
-WHERE a.user_role IN ('Educators', 'Non-Teaching') ";
+INNER JOIN course b ON a.course_code = b.id
+WHERE a.user_role IN ('Educator', 'Non-Teaching') ";
 $extraWhere = "";
 
 // Include SQL query processing class

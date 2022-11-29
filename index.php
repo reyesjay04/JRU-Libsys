@@ -37,17 +37,19 @@ switch ($_SERVER['REQUEST_URI']) {
                 $_SESSION['USER_FIRST'] = $userData['first_name'];
                 $_SESSION['USER_LAST'] = $userData['last_name'];
                 $_SESSION['USER_CONFIG'] = $userData['isconfig'];      
+                $_SESSION['USER_ID'] = $userData['user_id'];   
+                $_SESSION['USER_PICTURE'] = $userData['picture'];   
             }
                    
-            if ($_SESSION['USER_ROLE'] == "Students") {
+            if ($_SESSION['USER_ROLE'] == "Student") {
                 echo "
                 <script>
-                    window.location.replace('http://localhost:8012/libsys/students');
+                    window.location.replace('http://localhost:8080/libsys/students');
                 </script>";
             } else {
                 echo "
                 <script>
-                    window.location.replace('http://localhost:8012/libsys/ecnt');
+                    window.location.replace('http://localhost:8080/libsys/ecnt');
                 </script>";
             }
             
@@ -56,4 +58,5 @@ switch ($_SERVER['REQUEST_URI']) {
         }
     break;
 }
+
 ?>

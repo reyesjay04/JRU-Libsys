@@ -17,5 +17,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <link rel="stylesheet" href="../plugins/select2/css/select2.min.css">
 
   <link rel="stylesheet" href="../dist/css/adminlte.min.css">
+
+  <link rel="stylesheet" href="../plugins/daterangepicker/daterangepicker.css">
   
+  <link rel="stylesheet" href="../res/star.css">
 </head>

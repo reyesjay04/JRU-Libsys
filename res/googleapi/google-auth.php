@@ -5,7 +5,7 @@ $client = new Google\Client();
 $client->setAuthConfig('res/googleapi/client_cred.json');
 $client->addScope("email");
 $client->addScope("profile");
-$redirect_uri = 'http://localhost:8012/libsys/';
+$redirect_uri = 'http://localhost:8080/libsys/';
 $client->setRedirectUri($redirect_uri);
 
 ?>

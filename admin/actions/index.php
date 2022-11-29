@@ -64,7 +64,16 @@ if(isset($_GET['login'])) {
 
     include 'logout.php';
 
+}  else if(isset($_GET['approvepost']))  { 
+
+    include 'approvepost.php';
+
+} else if(isset($_GET['disapprovepost']))  { 
+
+    include 'disapprovepost.php';
+
 }
+
 
 
 

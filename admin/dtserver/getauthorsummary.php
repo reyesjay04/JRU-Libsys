@@ -14,7 +14,7 @@ $primaryKey = 'id';
 $artFilter = "";
 if($_GET['filter'] <> 'All') {
     $deptFilter = $_GET['filter'];
-    $artFilter = "AND artall.dept_code = '$deptFilter'";
+    $artFilter = "WHERE artall.dept_code = '$deptFilter'";
 }
 
 $columns = array(
@@ -33,7 +33,7 @@ $columns = array(
 $joinQuery = "FROM users u LEFT JOIN author_list aul ON aul.user_id = u.id 
 LEFT JOIN articles art ON art.id = aul.art_id AND art.status = 'N' 
 LEFT JOIN articles artall ON artall.id = aul.art_id
-WHERE u.user_role IN ('Educators') $artFilter GROUP BY u.id";
+$artFilter GROUP BY u.id";
 $extraWhere = "";
 
 // Include SQL query processing class

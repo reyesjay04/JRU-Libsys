@@ -63,6 +63,7 @@ class User {
                             )";
 
                 $this->pdo->prepare($sql)->execute($newData);
+                $newData['user_id'] = $this->pdo->lastInsertId();
             } else {
 
                 $stmt = $this->pdo->prepare($checkQuery);
@@ -70,6 +71,7 @@ class User {
                 $row = $stmt->fetch();           
                 $newData['user_role'] = $row['user_role'];  
                 $newData['isconfig'] = $row['isconfig'];  
+                $newData['user_id'] = $row['id'];  
             }
              
             // Get user data from the database 
