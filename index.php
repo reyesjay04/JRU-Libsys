@@ -44,12 +44,12 @@ switch ($_SERVER['REQUEST_URI']) {
             if ($_SESSION['USER_ROLE'] == "Student") {
                 echo "
                 <script>
-                    window.location.replace('http://localhost:8080/libsys/students');
+                    window.location.replace('http://localhost:8012/libsys/students');
                 </script>";
             } else {
                 echo "
                 <script>
-                    window.location.replace('http://localhost:8080/libsys/ecnt');
+                    window.location.replace('http://localhost:8012/libsys/ecnt');
                 </script>";
             }
             

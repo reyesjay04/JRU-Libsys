@@ -40,11 +40,10 @@
             </div>
           </div>
         </div>
-
         <div class="row">   
-          <div class="col-md-12">
+          <div class="col-md-8">
             <div class="card">
-            <div class="card-header">
+              <div class="card-header">
                 <h3 class="card-title">Post Details</h3>
               </div>
               <div class="card-body">
@@ -53,6 +52,69 @@
                   </div>
                 </div>
               </div>     
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">
+                  <i class="fas fa-text-width"></i>
+                  Announcement
+                </h3>
+              </div>
+              <div class="card-body">
+                <blockquote>
+                  <p>Dear [name], We are excited to announce that, due to our remarkable growth over the last [enter number] of years, we are expanding! In fact, we are opening a new store in [enter location and specifics]. We invite you to celebrate with us during the big opening day on [enter date].</p>
+                </blockquote>
+                <div class="attachment-block clearfix">
+                  <a type="button" id="ATT63846031b6b87.png" onclick="downloadFile(this.id)" class="link-black text-sm"><i class="fas fa-link mr-1"></i>ATT63846031b6b87.png</a>
+                </div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Statistics<h3>
+              </div>
+              <div class="card-body p-0">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Category</th>
+                      <th>Progress</th>
+                      <th style="width: 40px">Label</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Likes</td>
+                      <td>
+                        <div class="progress progress-xs">
+                          <div class="progress-bar progress-bar-danger" style="width: 55%"></div>
+                        </div>
+                      </td>
+                      <td><span class="badge bg-danger">55%</span></td>
+                    </tr>
+                    <tr>
+                      <td>Dislikes</td>
+                      <td>
+                        <div class="progress progress-xs">
+                          <div class="progress-bar bg-danger" style="width: 70%"></div>
+                        </div>
+                      </td>
+                      <td><span class="badge bg-danger">70%</span></td>
+                    </tr>
+                    <tr>
+                      <td>Pending Post</td>
+                      <td>
+                        <div class="progress progress-xs progress-striped active">
+                          <div class="progress-bar bg-warning" style="width: 30%"></div>
+                        </div>
+                      </td>
+                      <td><span class="badge bg-warning">30%</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>

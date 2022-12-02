@@ -103,85 +103,6 @@ $( document ).ready(function() {
         var dept_code = $("#dept").val();
         LoadCourse(dept_code)
     });
-
-    $('#quickForm').validate({
-    
-    rules: {
-      title: {
-        required: true,
-      },
-      dept: {
-        required: true,
-      },
-      content: {
-        required: true,
-      },
-      customFile: {
-        required: true,
-      },
-      authors: {
-        required: true
-      },
-      availability: {
-        required: true
-      },
-      keywords: {
-        required: true
-      },
-    },
-
-    messages: {
-      email: {
-        required: "Please enter a email address",
-        email: "Please enter a vaild email address"
-      },
-      password: {
-        required: "Please provide a password",
-        minlength: "Your password must be at least 5 characters long"
-      },
-      terms: "Please accept our terms"
-    },
-
-    errorElement: 'span',
-    errorPlacement: function (error, element) {
-      error.addClass('invalid-feedback');
-      element.closest('.form-group').append(error);
-    },
-    highlight: function (element, errorClass, validClass) {
-      $(element).addClass('is-invalid');
-    },
-
-    unhighlight: function (element, errorClass, validClass) {
-      $(element).removeClass('is-invalid');
-    },
-
-
-  });    
-
-  $('form#quickForm').submit(function (e) {
-    e.preventDefault();
-    var $form = $(this);
-  // check if the input is valid using a 'valid' property
-    if (!$form.valid) return false;
-
-    console.log();
-    var formData = new FormData(this); 
-    formData.append('tags', JSON.stringify($("#authors").select2('data')))
-    $.ajax({
-        type: 'POST',
-        url: 'actions/?addpost',
-        contentType: false,
-        cache: false,
-        processData:false,
-        data: formData,
-        success: function (response) {
-          alert("Success");
-          location.reload();
-
-        },
-    });
-});
-  
 });
 
 function LoadDepartments() {
@@ -244,6 +165,81 @@ function authors() {
       }
   });
 }
+
+$(function () {
+  $('#quickForm').validate({
+    rules: {
+      title: {
+        required: true,
+      },
+      dept: {
+        required: true,
+      },
+      content: {
+        required: true,
+      },
+      customFile: {
+        required: true,
+      },
+      authors: {
+        required: true
+      },
+      availability: {
+        required: true
+      },
+      keywords: {
+        required: true
+      },
+    },
+
+    messages: {
+      email: {
+        required: "Please enter a email address",
+        email: "Please enter a vaild email address"
+      },
+      password: {
+        required: "Please provide a password",
+        minlength: "Your password must be at least 5 characters long"
+      },
+      terms: "Please accept our terms"
+    },
+
+    errorElement: 'span',
+    errorPlacement: function (error, element) {
+      error.addClass('invalid-feedback');
+      element.closest('.form-group').append(error);
+    },
+    highlight: function (element, errorClass, validClass) {
+      $(element).addClass('is-invalid');
+    },
+
+    unhighlight: function (element, errorClass, validClass) {
+      $(element).removeClass('is-invalid');
+    },
+  });
+  $('#quickForm').submit(function (e) {
+    e.preventDefault();
+
+    if(!$(this).valid()) {
+      return false;
+    }
+    var formData = new FormData(this); 
+    formData.append('tags', JSON.stringify($("#authors").select2('data')))
+    $.ajax({
+        type: 'POST',
+        url: 'actions/?addpost',
+        contentType: false,
+        cache: false,
+        processData:false,
+        data: formData,
+        success: function (response) {
+          alert("Success");
+          location.reload();
+
+        },
+    });
+  });
+});
 </script>
 </body>
 </html>

@@ -120,6 +120,29 @@ function DeleteUser($id) {
     return $res;
 
 }
+
+function GetUserProfile($user_id) {
+    require_once("connection.php");
+    $pdo = Database::getConnection();
+
+    $sql = "SELECT co.comment, u.first_name, u.last_name, co.created_at, u.picture FROM comments co LEFT JOIN users u ON u.id = co.user_id WHERE article_id = :article_id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute(["article_id" => $article_id]);
+    $data = $stmt->fetchAll();
+    $response = array();
+    foreach($data as $comment){
+        
+        $response[] = array(
+            "comment" => $comment['comment'],
+            "first_name" => $comment['first_name'],
+            "created_at" => $comment['created_at'],
+            "last_name" => $comment['last_name'],
+            "picture" => $comment['picture'],
+        );
+    }
+    return $response;
+
+}
 #endregion
 
 #region Course

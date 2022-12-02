@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.2
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 30, 2022 at 12:11 AM
--- Server version: 10.4.13-MariaDB
--- PHP Version: 7.4.7
+-- Generation Time: Dec 02, 2022 at 01:50 AM
+-- Server version: 8.0.19
+-- PHP Version: 8.1.6
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -20,6 +20,8 @@ SET time_zone = "+00:00";
 --
 -- Database: `jrurepo`
 --
+CREATE DATABASE IF NOT EXISTS `jrurepo` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+USE `jrurepo`;
 
 -- --------------------------------------------------------
 
@@ -28,17 +30,16 @@ SET time_zone = "+00:00";
 --
 
 DROP TABLE IF EXISTS `admin`;
-CREATE TABLE IF NOT EXISTS `admin` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `admin` (
+  `id` int NOT NULL,
   `username` varchar(50) NOT NULL,
   `password` text NOT NULL,
   `firstname` varchar(50) NOT NULL,
   `lastname` varchar(50) NOT NULL,
   `email` varchar(50) NOT NULL,
   `created_at` datetime NOT NULL,
-  `status` varchar(1) NOT NULL DEFAULT 'Y',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
+  `status` varchar(1) NOT NULL DEFAULT 'Y'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `admin`
@@ -50,27 +51,40 @@ INSERT INTO `admin` (`id`, `username`, `password`, `firstname`, `lastname`, `ema
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `announcement`
+--
+
+DROP TABLE IF EXISTS `announcement`;
+CREATE TABLE `announcement` (
+  `id` int NOT NULL,
+  `description` text NOT NULL,
+  `attachment` text NOT NULL,
+  `created_at` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `articles`
 --
 
 DROP TABLE IF EXISTS `articles`;
-CREATE TABLE IF NOT EXISTS `articles` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `articles` (
+  `id` int NOT NULL,
   `title` varchar(100) NOT NULL,
   `dept_code` varchar(10) NOT NULL,
   `cat_code` varchar(10) NOT NULL,
   `content` text NOT NULL,
   `file` varchar(100) NOT NULL,
   `availability` varchar(10) NOT NULL,
-  `view_count` int(11) NOT NULL,
-  `download_count` int(11) NOT NULL,
-  `main_author_id` int(11) NOT NULL,
+  `view_count` int NOT NULL DEFAULT '0',
+  `download_count` int NOT NULL DEFAULT '0',
+  `main_author_id` int NOT NULL,
   `keyword` text NOT NULL,
   `created_at` datetime NOT NULL,
-  `updated_at` datetime NOT NULL,
-  `status` varchar(1) NOT NULL DEFAULT 'N',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
+  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `status` varchar(1) NOT NULL DEFAULT 'N'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `articles`
@@ -79,7 +93,8 @@ CREATE TABLE IF NOT EXISTS `articles` (
 INSERT INTO `articles` (`id`, `title`, `dept_code`, `cat_code`, `content`, `file`, `availability`, `view_count`, `download_count`, `main_author_id`, `keyword`, `created_at`, `updated_at`, `status`) VALUES
 (1, 'VB.NET Tutorial', 'CSE', 'BSCpE', 'VB.Net is a simple, modern, object-oriented computer programming language developed by Microsoft to combine the power of .NET Framework and the common language runtime with the productivity benefits that are the hallmark of Visual Basic. This tutorial will teach you basic VB.Net programming and will also take you through various advanced concepts related to VB.Net programming language.', '12312312363845fee22235.txt', 'PUB', 0, 0, 1, 'vb', '2022-11-28 15:14:54', '2022-11-28 15:41:21', 'Y'),
 (2, 'PHP Introduction', 'CSE', 'BSCpE', 'PHP is an acronym for \"PHP: Hypertext Preprocessor\"\r\nPHP is a widely-used, open source scripting language\r\nPHP scripts are executed on the server\r\nPHP is free to download and use', 'ATT63846031b6b87.png', 'PRIV', 0, 0, 1, 'php', '2022-11-28 15:16:01', '2022-11-28 15:35:53', 'Y'),
-(3, 'A', 'AEP', 'BSPsy', 'A', 'ATT6384a97f751b3.png', 'PUB', 0, 0, 1, 'CA', '2022-11-28 20:28:47', '0000-00-00 00:00:00', 'N');
+(3, 'A', 'AEP', 'BSPsy', 'A', 'ATT6384a97f751b3.png', 'PUB', 0, 0, 1, 'CA', '2022-11-28 20:28:47', '0000-00-00 00:00:00', 'N'),
+(4, 'ca', 'AEP', 'AB', 'ca', 'IMG_20221125_10275063889f45390b6.jpg', 'PUB', 0, 0, 1, 'ca', '2022-12-01 20:34:13', '2022-12-01 20:34:13', 'N');
 
 -- --------------------------------------------------------
 
@@ -88,13 +103,12 @@ INSERT INTO `articles` (`id`, `title`, `dept_code`, `cat_code`, `content`, `file
 --
 
 DROP TABLE IF EXISTS `article_access`;
-CREATE TABLE IF NOT EXISTS `article_access` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `art_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `status` varchar(1) NOT NULL DEFAULT 'N',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
+CREATE TABLE `article_access` (
+  `id` int NOT NULL,
+  `art_id` int NOT NULL,
+  `user_id` int NOT NULL,
+  `status` varchar(1) NOT NULL DEFAULT 'N'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `article_access`
@@ -110,12 +124,11 @@ INSERT INTO `article_access` (`id`, `art_id`, `user_id`, `status`) VALUES
 --
 
 DROP TABLE IF EXISTS `author_list`;
-CREATE TABLE IF NOT EXISTS `author_list` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `art_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4;
+CREATE TABLE `author_list` (
+  `id` int NOT NULL,
+  `art_id` int NOT NULL,
+  `user_id` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `author_list`
@@ -127,7 +140,9 @@ INSERT INTO `author_list` (`id`, `art_id`, `user_id`) VALUES
 (3, 2, 3),
 (4, 2, 1),
 (5, 3, 3),
-(6, 3, 1);
+(6, 3, 1),
+(7, 4, 3),
+(8, 4, 1);
 
 -- --------------------------------------------------------
 
@@ -136,18 +151,16 @@ INSERT INTO `author_list` (`id`, `art_id`, `user_id`) VALUES
 --
 
 DROP TABLE IF EXISTS `categories`;
-CREATE TABLE IF NOT EXISTS `categories` (
-  `cat_id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `categories` (
+  `cat_id` int NOT NULL,
   `cat_code` varchar(10) NOT NULL,
   `cat_name` varchar(50) NOT NULL,
   `created_by` varchar(50) NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_by` varchar(50) DEFAULT NULL,
-  `updated_at` datetime NOT NULL DEFAULT current_timestamp(),
-  `status` varchar(1) NOT NULL DEFAULT 'Y',
-  PRIMARY KEY (`cat_id`),
-  UNIQUE KEY `cat_code` (`cat_code`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4;
+  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `status` varchar(1) NOT NULL DEFAULT 'Y'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `categories`
@@ -171,14 +184,13 @@ INSERT INTO `categories` (`cat_id`, `cat_code`, `cat_name`, `created_by`, `creat
 --
 
 DROP TABLE IF EXISTS `citations`;
-CREATE TABLE IF NOT EXISTS `citations` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `article_id` int(11) NOT NULL,
+CREATE TABLE `citations` (
+  `id` int NOT NULL,
+  `article_id` int NOT NULL,
   `link` text NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `created_at` datetime NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `user_id` int NOT NULL,
+  `created_at` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -187,14 +199,13 @@ CREATE TABLE IF NOT EXISTS `citations` (
 --
 
 DROP TABLE IF EXISTS `comments`;
-CREATE TABLE IF NOT EXISTS `comments` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `article_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
+CREATE TABLE `comments` (
+  `id` int NOT NULL,
+  `article_id` int NOT NULL,
+  `user_id` int NOT NULL,
   `comment` text NOT NULL,
-  `created_at` datetime NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4;
+  `created_at` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `comments`
@@ -220,19 +231,17 @@ INSERT INTO `comments` (`id`, `article_id`, `user_id`, `comment`, `created_at`) 
 --
 
 DROP TABLE IF EXISTS `course`;
-CREATE TABLE IF NOT EXISTS `course` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `course` (
+  `id` int NOT NULL,
   `dept_code` varchar(20) NOT NULL,
   `code` varchar(10) NOT NULL,
   `course` varchar(100) NOT NULL,
   `created_by` varchar(50) NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_by` varchar(50) DEFAULT NULL,
-  `updated_at` datetime NOT NULL DEFAULT current_timestamp(),
-  `status` varchar(1) NOT NULL DEFAULT 'Y',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `code` (`code`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4;
+  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `status` varchar(1) NOT NULL DEFAULT 'Y'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `course`
@@ -256,18 +265,16 @@ INSERT INTO `course` (`id`, `dept_code`, `code`, `course`, `created_by`, `create
 --
 
 DROP TABLE IF EXISTS `department`;
-CREATE TABLE IF NOT EXISTS `department` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `department` (
+  `id` int NOT NULL,
   `code` varchar(50) NOT NULL,
   `name` varchar(100) NOT NULL,
   `created_at` datetime NOT NULL,
   `created_by` varchar(50) NOT NULL,
-  `updated_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_by` varchar(20) DEFAULT NULL,
-  `status` varchar(1) NOT NULL DEFAULT 'Y',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `code` (`code`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4;
+  `status` varchar(1) NOT NULL DEFAULT 'Y'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `department`
@@ -285,12 +292,11 @@ INSERT INTO `department` (`id`, `code`, `name`, `created_at`, `created_by`, `upd
 --
 
 DROP TABLE IF EXISTS `dislikes`;
-CREATE TABLE IF NOT EXISTS `dislikes` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `article_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4;
+CREATE TABLE `dislikes` (
+  `id` int NOT NULL,
+  `article_id` int NOT NULL,
+  `user_id` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -299,12 +305,11 @@ CREATE TABLE IF NOT EXISTS `dislikes` (
 --
 
 DROP TABLE IF EXISTS `no_likes`;
-CREATE TABLE IF NOT EXISTS `no_likes` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `article_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4;
+CREATE TABLE `no_likes` (
+  `id` int NOT NULL,
+  `article_id` int NOT NULL,
+  `user_id` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `no_likes`
@@ -321,15 +326,14 @@ INSERT INTO `no_likes` (`id`, `article_id`, `user_id`) VALUES
 --
 
 DROP TABLE IF EXISTS `ratings`;
-CREATE TABLE IF NOT EXISTS `ratings` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `article_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `rate_val` int(11) NOT NULL,
-  `rate_base` int(11) NOT NULL DEFAULT 5,
-  `created_at` datetime NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
+CREATE TABLE `ratings` (
+  `id` int NOT NULL,
+  `article_id` int NOT NULL,
+  `user_id` int NOT NULL,
+  `rate_val` int NOT NULL,
+  `rate_base` int NOT NULL DEFAULT '5',
+  `created_at` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `ratings`
@@ -347,25 +351,24 @@ INSERT INTO `ratings` (`id`, `article_id`, `user_id`, `rate_val`, `rate_base`, `
 --
 
 DROP TABLE IF EXISTS `users`;
-CREATE TABLE IF NOT EXISTS `users` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `oauth_uid` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `reference_id` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `user_role` varchar(10) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `first_name` varchar(25) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `last_name` varchar(25) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `email` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `gender` varchar(10) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `picture` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `course_code` varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `department_code` varchar(10) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `contact_number` varchar(20) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+CREATE TABLE `users` (
+  `id` int NOT NULL,
+  `oauth_uid` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `reference_id` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `user_role` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `first_name` varchar(25) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `last_name` varchar(25) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `email` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `gender` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `picture` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `course_code` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `department_code` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `contact_number` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `created_at` datetime NOT NULL,
   `modified` datetime NOT NULL,
-  `isconfig` varchar(1) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT 'N',
-  `status` varchar(1) NOT NULL DEFAULT 'Y',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+  `isconfig` varchar(1) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'N',
+  `status` varchar(1) NOT NULL DEFAULT 'Y'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `users`
@@ -374,8 +377,187 @@ CREATE TABLE IF NOT EXISTS `users` (
 INSERT INTO `users` (`id`, `oauth_uid`, `reference_id`, `user_role`, `first_name`, `last_name`, `email`, `gender`, `picture`, `course_code`, `department_code`, `contact_number`, `created_at`, `modified`, `isconfig`, `status`) VALUES
 (1, '111421296961153927711', '21200', 'Student', 'Jay', 'Reyes', 'jjreyes055@gmail.com', 'U', 'https://lh3.googleusercontent.com/a/ALm5wu1kdjKs3qyeDzIhrR55nUuTjpX_l-Hbkc4MvaGy=s96-c', 'AB', 'AEP', '09555555555', '2022-11-19 14:45:32', '2022-11-22 21:19:15', 'Y', 'Y'),
 (2, '113517220591565991884', '', 'Educator', 'Jeeg', 'Saw', 'jeegsaw04@gmail.com', NULL, 'https://lh3.googleusercontent.com/a/ALm5wu0wZtXY7C_3Misd7JXs7sbCDR-8tyL2K63Z9WP0=s96-c', '1', '0', '', '2022-11-19 14:46:01', '0000-00-00 00:00:00', 'N', 'Y'),
-(3, '105284222278475222344', '', 'Educator', 'Carl', 'Reyes', 'reyescarlarol08@gmail.com', NULL, 'https://lh3.googleusercontent.com/a/ALm5wu2R_hWXWZUM8Af4HE1Sdnk79tV0cp_TQvcOze23=s96-c', 'AB', '0', '', '2022-11-19 14:46:58', '0000-00-00 00:00:00', 'N', 'Y'),
+(3, '105284222278475222344', '', 'Educator', 'Janine', 'Reyes', 'reyescarlarol08@gmail.com', NULL, 'https://lh3.googleusercontent.com/a/ALm5wu2R_hWXWZUM8Af4HE1Sdnk79tV0cp_TQvcOze23=s96-c', 'AB', '0', '', '2022-11-19 14:46:58', '0000-00-00 00:00:00', 'N', 'Y'),
 (5, '107933929736267994805', '20099', 'Student', 'Carl', 'Reyes', 'pchsradtechreyes@gmail.com', 'M', 'https://lh3.googleusercontent.com/a/ALm5wu17Xit6UhlyzdLWtsBcH5wbgCntsSy2IyggSPw5=s96-c', 'BSCpE', 'CSE', '091541843265', '2022-11-30 06:58:19', '2022-11-30 06:59:18', 'Y', 'Y');
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `admin`
+--
+ALTER TABLE `admin`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `announcement`
+--
+ALTER TABLE `announcement`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `articles`
+--
+ALTER TABLE `articles`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `article_access`
+--
+ALTER TABLE `article_access`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `author_list`
+--
+ALTER TABLE `author_list`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `categories`
+--
+ALTER TABLE `categories`
+  ADD PRIMARY KEY (`cat_id`),
+  ADD UNIQUE KEY `cat_code` (`cat_code`);
+
+--
+-- Indexes for table `citations`
+--
+ALTER TABLE `citations`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `comments`
+--
+ALTER TABLE `comments`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `course`
+--
+ALTER TABLE `course`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `code` (`code`);
+
+--
+-- Indexes for table `department`
+--
+ALTER TABLE `department`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `code` (`code`);
+
+--
+-- Indexes for table `dislikes`
+--
+ALTER TABLE `dislikes`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `no_likes`
+--
+ALTER TABLE `no_likes`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `ratings`
+--
+ALTER TABLE `ratings`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `admin`
+--
+ALTER TABLE `admin`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `announcement`
+--
+ALTER TABLE `announcement`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `articles`
+--
+ALTER TABLE `articles`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `article_access`
+--
+ALTER TABLE `article_access`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `author_list`
+--
+ALTER TABLE `author_list`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT for table `categories`
+--
+ALTER TABLE `categories`
+  MODIFY `cat_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
+-- AUTO_INCREMENT for table `citations`
+--
+ALTER TABLE `citations`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `comments`
+--
+ALTER TABLE `comments`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
+--
+-- AUTO_INCREMENT for table `course`
+--
+ALTER TABLE `course`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
+-- AUTO_INCREMENT for table `department`
+--
+ALTER TABLE `department`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT for table `dislikes`
+--
+ALTER TABLE `dislikes`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+
+--
+-- AUTO_INCREMENT for table `no_likes`
+--
+ALTER TABLE `no_likes`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+
+--
+-- AUTO_INCREMENT for table `ratings`
+--
+ALTER TABLE `ratings`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `users`
+--
+ALTER TABLE `users`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

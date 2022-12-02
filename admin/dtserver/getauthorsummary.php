@@ -8,9 +8,6 @@ $primaryKey = 'id';
 // The `db` parameter represents the column name in the database. 
 // The `dt` parameter represents the DataTables column identifier.
 
-// array( 'db' => '`a`.`user_fname`',     'dt' => 0,  'field' => 'user_fname' ),
-// array( 'db' => '`a`.`user_lname`',     'dt' => 1,  'field' => 'user_lname' ),
-// array( 'db' => 'COUNT(`b`.`store_id`) as store_id',     'dt' => 2,  'field' => 'store_id' ),
 $artFilter = "";
 if($_GET['filter'] <> 'All') {
     $deptFilter = $_GET['filter'];
@@ -26,8 +23,6 @@ $columns = array(
     array('db' => '(SELECT COUNT(article_id) FROM dislikes WHERE user_id = u.id) as Dislikes', 'dt' => 5 , 'field' => 'Dislikes'),
     array('db' => '(SELECT (SUM(rt.rate_val) / SUM(rt.rate_base) * 5) as Rate FROM ratings rt WHERE rt.user_id = u.id) as Ratings', 'dt' => 6 , 'field' => 'Ratings'),
     array('db' => 'SUM(artall.view_count) As ViewCount', 'dt' => 7 , 'field' => 'ViewCount'),
-
-
 );
 
 $joinQuery = "FROM users u LEFT JOIN author_list aul ON aul.user_id = u.id 
