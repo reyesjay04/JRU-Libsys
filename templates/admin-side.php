@@ -40,7 +40,19 @@
               </p>
             </a>
           </li>
-
+          <li class="nav-item">
+            <a href="?announcements" class="nav-link 
+            <?php 
+              if($_SERVER['REQUEST_URI'] == $LIB_SYS_DIR.'admin/?announcements' ) {
+                echo 'active';
+              }
+            ?> ">
+              <i class="nav-icon fas fa-horn-alt"></i>
+              <p>
+                Announcements
+              </p>
+            </a>
+          </li>
           <li class="nav-item       
             <?php
               switch ($_SERVER['REQUEST_URI']) {
@@ -58,7 +70,7 @@
                   break;
                 case $LIB_SYS_DIR.'admin/?pendingpost':
                   echo 'menu-is-opening menu-open';
-                    break;
+                  break;
               }       
             ?>">
             <a href="#" class="nav-link">

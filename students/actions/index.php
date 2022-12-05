@@ -74,10 +74,41 @@ if(isset($_GET['getdept'])) {
     
     include 'cancelrequest.php';
 
+} else if(isset($_GET['userprofile'])) {
+    
+    include 'getprofile.php';
+
+} else if(isset($_GET['savelist'])) {
+    
+    include 'savelist.php';
+
+} else if(isset($_GET['getpostandreads'])) {
+    
+    include 'getpostandreads.php';
+
+} else if(isset($_GET['getsavedarticles'])) {
+    
+    include 'getsavedarticles.php';
+
+} else if(isset($_GET['updateuserprofile'])) {
+    
+    include 'updateuserprofile.php';
+
+} else if(isset($_GET['dlfileann'])) {
+    
+    include 'filedownloadannoucements.php';
+
+} else if(isset($_GET['recommendations'])) {
+    
+    include 'recommendations.php';
+
+} else if(isset($_GET['getrequestlist'])) {
+    
+    include 'getrequestlist.php';
+
+} else if(isset($_GET['acceptrequest']) || isset($_GET['art_id'])) {
+
+    include 'acceptrequest.php';
 }
-
-
-
-
 
 ?>

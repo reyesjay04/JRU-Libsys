@@ -1,4 +1,7 @@
-<?php include '../templates/user-header.php'?>
+<?php include '../templates/user-header.php';
+
+$result = GetUserStudentProfileForForm($_SESSION['USER_ID']);
+?>
 <body class="hold-transition layout-top-nav">
 <div class="wrapper">
   <?php include '../templates/user-nav.php'?>
@@ -7,12 +10,12 @@
       <div class="container">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0"> Request</h1>
+            <h1 class="m-0"> Profile</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active"><a href="#">Request</a></li>
+              <li class="breadcrumb-item active"><a href="#">Profile</a></li>
             </ol>
           </div>
         </div>
@@ -33,16 +36,16 @@
                     <p class="text-muted text-center"><?php echo $_SESSION['USER_ROLE'];?></p>
                     <ul class="list-group list-group-unbordered mb-3">
                       <li class="list-group-item">
-                        <b>Total Post</b> <a class="float-right">1,322</a>
+                        <b>Total Post</b> <a class="float-right" id="totalpost">0</a>
                       </li>
                       <li class="list-group-item">
-                        <b>Total Ratings</b> <a class="float-right">543</a>
+                        <b>Total Ratings</b> <a class="float-right" id="totalratings">0</a>
                       </li>
                       <li class="list-group-item">
-                        <b>Total Likes</b> <a class="float-right">13,287</a>
+                        <b>Total Likes</b> <a class="float-right" id="totallikes">0</a>
                       </li>
                       <li class="list-group-item">
-                        <b>Total Dislikes</b> <a class="float-right">13,287</a>
+                        <b>Total Dislikes</b> <a class="float-right" id="totaldislikes">0</a>
                       </li>
                     </ul>
                   </div>
@@ -55,26 +58,24 @@
                   <div class="card-body">
                     <strong><i class="fas fa-book mr-1"></i> Email Address</strong>
 
-                    <p class="text-muted">
-
-                    </p>
+                    <p class="text-muted" id="emailadd"></p>
 
                     <hr>
 
                     <strong><i class="fas fa-map-marker-alt mr-1"></i> Department</strong>
 
-                    <p class="text-muted"></p>
+                    <p class="text-muted" id="department"></p>
 
                     <hr>
 
-                    <strong><i class="fas fa-pencil-alt mr-1"></i> Course</strong>
+                    <strong><i class="fas fa-pencil-alt mr-1" ></i> Course</strong>
 
-                    <p class="text-muted"></p>
+                    <p class="text-muted" id="usercourse"></p>
                     <hr>
 
                     <strong><i class="far fa-file-alt mr-1"></i> Contact Number</strong>
 
-                    <p class="text-muted"></p>
+                    <p class="text-muted" id="contact"></p>
                   </div>
                 </div>
               </div>
@@ -84,170 +85,95 @@
                     <ul class="nav nav-pills">
                       <li class="nav-item"><a class="nav-link active" href="#statistics" data-toggle="tab">Statistics</a></li>
                       <li class="nav-item"><a class="nav-link" href="#savedlist" data-toggle="tab">Saved List</a></li>
+                      <li class="nav-item"><a class="nav-link" href="#request" data-toggle="tab">Article Request List</a></li>
+                      <li class="nav-item"><a class="nav-link" href="#settings" data-toggle="tab">Settings</a></li>
                     </ul>
                   </div>
                   <div class="card-body">
                     <div class="tab-content">
                       <div class="tab-pane active" id="statistics">
-                        <!-- Post -->
-                        <div class="post">
-                          <div class="user-block">
-                            <img class="img-circle img-bordered-sm" src="../../dist/img/user1-128x128.jpg" alt="user image">
-                            <span class="username">
-                              <a href="#">Jonathan Burke Jr.</a>
-                              <a href="#" class="float-right btn-tool"><i class="fas fa-times"></i></a>
-                            </span>
-                            <span class="description">Shared publicly - 7:30 PM today</span>
-                          </div>
-                          <!-- /.user-block -->
-                          <p>
-                            Lorem ipsum represents a long-held tradition for designers,
-                            typographers and the like. Some people hate it and argue for
-                            its demise, but others ignore the hate as they create awesome
-                            tools to help create filler text for everyone from bacon lovers
-                            to Charlie Sheen fans.
-                          </p>
-
-                          <p>
-                            <a href="#" class="link-black text-sm mr-2"><i class="fas fa-share mr-1"></i> Share</a>
-                            <a href="#" class="link-black text-sm"><i class="far fa-thumbs-up mr-1"></i> Like</a>
-                            <span class="float-right">
-                              <a href="#" class="link-black text-sm">
-                                <i class="far fa-comments mr-1"></i> Comments (5)
-                              </a>
-                            </span>
-                          </p>
-
-                          <input class="form-control form-control-sm" type="text" placeholder="Type a comment">
-                        </div>
-                        <!-- /.post -->
-
-                        <!-- Post -->
-                        <div class="post clearfix">
-                          <div class="user-block">
-                            <img class="img-circle img-bordered-sm" src="../../dist/img/user7-128x128.jpg" alt="User Image">
-                            <span class="username">
-                              <a href="#">Sarah Ross</a>
-                              <a href="#" class="float-right btn-tool"><i class="fas fa-times"></i></a>
-                            </span>
-                            <span class="description">Sent you a message - 3 days ago</span>
-                          </div>
-                          <!-- /.user-block -->
-                          <p>
-                            Lorem ipsum represents a long-held tradition for designers,
-                            typographers and the like. Some people hate it and argue for
-                            its demise, but others ignore the hate as they create awesome
-                            tools to help create filler text for everyone from bacon lovers
-                            to Charlie Sheen fans.
-                          </p>
-
-                          <form class="form-horizontal">
-                            <div class="input-group input-group-sm mb-0">
-                              <input class="form-control form-control-sm" placeholder="Response">
-                              <div class="input-group-append">
-                                <button type="submit" class="btn btn-danger">Send</button>
-                              </div>
-                            </div>
-                          </form>
-                        </div>
-                        <!-- /.post -->
-
-                        <!-- Post -->
-                        <div class="post">
-                          <div class="user-block">
-                            <img class="img-circle img-bordered-sm" src="../../dist/img/user6-128x128.jpg" alt="User Image">
-                            <span class="username">
-                              <a href="#">Adam Jones</a>
-                              <a href="#" class="float-right btn-tool"><i class="fas fa-times"></i></a>
-                            </span>
-                            <span class="description">Posted 5 photos - 5 days ago</span>
-                          </div>
-                          <!-- /.user-block -->
-                          <div class="row mb-3">
-                            <div class="col-sm-6">
-                              <img class="img-fluid" src="../../dist/img/photo1.png" alt="Photo">
-                            </div>
-                            <!-- /.col -->
-                            <div class="col-sm-6">
-                              <div class="row">
-                                <div class="col-sm-6">
-                                  <img class="img-fluid mb-3" src="../../dist/img/photo2.png" alt="Photo">
-                                  <img class="img-fluid" src="../../dist/img/photo3.jpg" alt="Photo">
-                                </div>
-                                <!-- /.col -->
-                                <div class="col-sm-6">
-                                  <img class="img-fluid mb-3" src="../../dist/img/photo4.jpg" alt="Photo">
-                                  <img class="img-fluid" src="../../dist/img/photo1.png" alt="Photo">
-                                </div>
-                                <!-- /.col -->
-                              </div>
-                              <!-- /.row -->
-                            </div>
-                            <!-- /.col -->
-                          </div>
-                          <!-- /.row -->
-
-                          <p>
-                            <a href="#" class="link-black text-sm mr-2"><i class="fas fa-share mr-1"></i> Share</a>
-                            <a href="#" class="link-black text-sm"><i class="far fa-thumbs-up mr-1"></i> Like</a>
-                            <span class="float-right">
-                              <a href="#" class="link-black text-sm">
-                                <i class="far fa-comments mr-1"></i> Comments (5)
-                              </a>
-                            </span>
-                          </p>
-
-                          <input class="form-control form-control-sm" type="text" placeholder="Type a comment">
-                        </div>
-                        <!-- /.post -->
+                        
                       </div>
                       <div class="tab-pane" id="savedlist">
-                        <form class="form-horizontal">
-                          <div class="form-group row">
-                            <label for="inputName" class="col-sm-2 col-form-label">Name</label>
-                            <div class="col-sm-10">
-                              <input type="email" class="form-control" id="inputName" placeholder="Name">
+                        
+                      </div>
+                      <div class="tab-pane" id="request">
+                        
+                      </div>
+                      <div class="tab-pane" id="settings">
+                        <form class="form-horizontal" action="actions/?updateuserprofile" method="POST" enctype="multipart/form-data">
+                        <div class="form-group row">
+                          <label for="reference_id" class="col-sm-2 col-form-label">Student ID</label>
+                          <div class="col-sm-10">
+                            <input type="text" class="form-control" id="reference_id" name="reference_id" placeholder="Student ID" value="<?php echo  $result[0]['reference_id'];?>" required>
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <label for="firstname" class="col-sm-2 col-form-label">First Name</label>
+                          <div class="col-sm-10">
+                            <input type="text" class="form-control" id="firstname" name="firstname" placeholder="First Name" value="<?php echo  $result[0]['FirstName'];?>" required>
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <label for="lastname" class="col-sm-2 col-form-label">Last Name</label>
+                          <div class="col-sm-10">
+                            <input type="text" class="form-control" id="lastname" name="lastname" placeholder="Last Name" value="<?php echo  $result[0]['LastName'];?>" required>
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <label for="contact" class="col-sm-2 col-form-label">Contact Number</label>
+                          <div class="col-sm-10">
+                            <input type="text" class="form-control" id="contact" name="contact" placeholder="Contact Number" value="<?php echo  $result[0]['contact'];?>" required>
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <label for="dept" class="col-sm-2 col-form-label">Department</label>
+                          <div class="col-sm-10">
+                            <select class="form-control" id="dept" name="dept" required>
+                            </select>
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <label for="course" class="col-sm-2 col-form-label">Course</label>
+                          <div class="col-sm-10">
+                            <select class="form-control" id="course" name="course" required>
+                            </select>
+                          </div>
+                        </div>
+
+                        <div class="form-group row">
+                          <label for="course" class="col-sm-2 col-form-label">Gender</label>
+                          <div class="col-sm-10">
+                            <div class="custom-control custom-radio">
+                              <input class="custom-control-input" type="radio" id="gender2" name="gender" value="M" <?php echo ($result[0]['gender'] == "M" ? 'checked=""' : "");?>>
+                              <label for="gender2" class="custom-control-label">Male</label>
+                            </div>
+                            <div class="custom-control custom-radio">
+                              <input class="custom-control-input" type="radio" id="gender1" name="gender" value="F" <?php echo ($result[0]['gender'] == "F" ? 'checked=""' : "");?>>
+                              <label for="gender1" class="custom-control-label">Female</label>
+                            </div>
+                            <div class="custom-control custom-radio">
+                              <input class="custom-control-input" type="radio" id="gender3" name="gender" value="U" <?php echo ($result[0]['gender'] == "U" ? 'checked=""' : "");?>>
+                              <label for="gender3" class="custom-control-label">Unknown</label>
                             </div>
                           </div>
-                          <div class="form-group row">
-                            <label for="inputEmail" class="col-sm-2 col-form-label">Email</label>
-                            <div class="col-sm-10">
-                              <input type="email" class="form-control" id="inputEmail" placeholder="Email">
+                        </div>
+
+                        <div class="form-group row">
+                          <label for="course" class="col-sm-2 col-form-label">profile</label>
+                          <div class="col-sm-10">
+                            <div class="custom-file">
+                              <input type="file" class="custom-file-input" id="profilepic" name="profilepic" accept="image/png, image/jpeg">
+                              <label class="custom-file-label" for="profilepic">Choose file</label>
                             </div>
                           </div>
-                          <div class="form-group row">
-                            <label for="inputName2" class="col-sm-2 col-form-label">Name</label>
-                            <div class="col-sm-10">
-                              <input type="text" class="form-control" id="inputName2" placeholder="Name">
-                            </div>
+                        </div>
+                        <div class="form-group row">
+                          <div class="offset-sm-2 col-sm-10">
+                            <button type="submit" class="btn btn-danger">Submit</button>
                           </div>
-                          <div class="form-group row">
-                            <label for="inputExperience" class="col-sm-2 col-form-label">Experience</label>
-                            <div class="col-sm-10">
-                              <textarea class="form-control" id="inputExperience" placeholder="Experience"></textarea>
-                            </div>
-                          </div>
-                          <div class="form-group row">
-                            <label for="inputSkills" class="col-sm-2 col-form-label">Skills</label>
-                            <div class="col-sm-10">
-                              <input type="text" class="form-control" id="inputSkills" placeholder="Skills">
-                            </div>
-                          </div>
-                          <div class="form-group row">
-                            <div class="offset-sm-2 col-sm-10">
-                              <div class="checkbox">
-                                <label>
-                                  <input type="checkbox"> I agree to the <a href="#">terms and conditions</a>
-                                </label>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="form-group row">
-                            <div class="offset-sm-2 col-sm-10">
-                              <button type="submit" class="btn btn-danger">Submit</button>
-                            </div>
-                          </div>
-                        </form>
+                        </div>
+                      </form>
                       </div>
                     </div>
                   </div>
@@ -267,10 +193,20 @@
 </div>
 <?php include '../templates/user-footer.php'?>
 <script>
-
+$(function () {
+  bsCustomFileInput.init();
+});
 
 $( document ).ready(function() {
     GetArticle();
+    getuserprofile();
+    getsavedarticles();
+    LoadDepartments();
+    getrequestlist();
+    $("#dept").change(function() {
+        var dept_code = $("#dept").val();
+        LoadCourse(dept_code);
+    });
 });
 
 
@@ -282,7 +218,6 @@ function GetArticle() {
         $("#articles").empty();
         $("#articles").append(data);
       }
-
   });
 }
 
@@ -294,10 +229,87 @@ function cancelrequest(art_id) {
       success:function(data){
         location.reload();
       }
-
   });
 }
 
+function getuserprofile() {
+  $.ajax({
+      url:"actions/?userprofile",
+      method:"POST",
+      dataType: "json",
+      success:function(data){
+        $("#totalpost").text(data[0]['totalpost']);
+        $("#totalratings").text(data[0]['totalratings']);
+        $("#totallikes").text(data[0]['totallikes']);
+        $("#totaldislikes").text(data[0]['totaldislikes']);
+
+        $("#emailadd").text(data[0]['emailadd']);
+        $("#department").text(data[0]['department']);
+        $("#usercourse").text(data[0]['course']);
+        $("#contact").text(data[0]['contact']);
+      }
+  });
+}
+
+function getsavedarticles() {
+  $.ajax({
+      url:"actions/?getsavedarticles",
+      method:"POST",
+      success:function(data){
+        $("#savedlist").append(data);
+      }
+  });
+}
+
+function getrequestlist() {
+  $.ajax({
+      url:"actions/?getrequestlist",
+      method:"POST",
+      success:function(data){
+        $("#request").append(data);
+      }
+  });
+}
+
+function LoadDepartments() {
+    $.ajax({
+      url: 'actions/?getdept',
+      dataType: 'json',
+      success:function(response){     
+        $("#dept").empty();
+        $("#dept").append("<option value=''>All</option>")
+        var len = response.length;
+        for( var i = 0; i<len; i++){
+            var code = response[i]['Code'];
+            var name = response[i]['Name']; 
+            $("#dept").append("<option value='"+code+"'>"+name+"</option>");           
+        }
+        $("#dept").val("<?php echo  $result[0]['department'];?>");
+        var dept_code = $("#dept").val();
+        LoadCourse(dept_code);
+      }
+    });
+}
+
+function LoadCourse(dept_code) {
+    $.ajax({
+      url: 'actions/?getcourse',
+      dataType: 'json',
+      method:"POST",
+      data: {dept_code:dept_code},
+      success:function(response){     
+        $("#course").empty();
+        $("#course").append("<option value=''>All</option>")
+        var len = response.length;
+        for( var i = 0; i<len; i++){
+            var code = response[i]['Code'];
+            var name = response[i]['Name']; 
+            $("#course").append("<option value='"+code+"'>"+name+"</option>");           
+        }
+        $("#course").val("<?php echo  $result[0]['course'];?>");
+      }
+    });
+}
 </script>
 </body>
 </html>

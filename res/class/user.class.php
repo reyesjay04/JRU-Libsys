@@ -72,6 +72,8 @@ class User {
                 $newData['user_role'] = $row['user_role'];  
                 $newData['isconfig'] = $row['isconfig'];  
                 $newData['user_id'] = $row['id'];  
+                $newData['picture'] = $row['picture'];  
+       
             }
              
             // Get user data from the database 

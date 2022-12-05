@@ -1,4 +1,9 @@
 <?php include '../templates/user-header.php'?>
+<?php 
+
+$result = RetrieveAnnouncement();
+
+?>
 <body class="hold-transition layout-top-nav">
 <div class="wrapper">
   <?php include '../templates/user-nav.php'?>
@@ -58,62 +63,52 @@
             <div class="card">
               <div class="card-header">
                 <h3 class="card-title">
-                  <i class="fas fa-text-width"></i>
                   Announcement
                 </h3>
               </div>
               <div class="card-body">
+                
                 <blockquote>
-                  <p>Dear [name], We are excited to announce that, due to our remarkable growth over the last [enter number] of years, we are expanding! In fact, we are opening a new store in [enter location and specifics]. We invite you to celebrate with us during the big opening day on [enter date].</p>
+                  <p>Title: <?php echo $result[0]['title']?></p>
+                  <p><?php echo $result[0]['description']?></p>
                 </blockquote>
                 <div class="attachment-block clearfix">
-                  <a type="button" id="ATT63846031b6b87.png" onclick="downloadFile(this.id)" class="link-black text-sm"><i class="fas fa-link mr-1"></i>ATT63846031b6b87.png</a>
+                  <a type="button" id="<?php echo $result[0]['filename']?>" onclick="downloadFile(this.id)" class="link-black text-sm"><i class="fas fa-link mr-1"></i><?php echo $result[0]['filename']?></a>
                 </div>
               </div>
             </div>
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">Statistics<h3>
+                <h3 class="card-title">Stats on your research</h3>
               </div>
-              <div class="card-body p-0">
-                <table class="table">
-                  <thead>
-                    <tr>
-                      <th>Category</th>
-                      <th>Progress</th>
-                      <th style="width: 40px">Label</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>Likes</td>
-                      <td>
-                        <div class="progress progress-xs">
-                          <div class="progress-bar progress-bar-danger" style="width: 55%"></div>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-12">
+                    <div class="row">
+                      <div class="col-6">
+                        <div class="info-box bg-light">
+                          <div class="info-box-content">
+                            <span class="info-box-text text-center text-muted">Total no. of post</span>
+                            <span class="info-box-number text-center text-muted mb-0" id="totalpost">0</span>
+                          </div>
                         </div>
-                      </td>
-                      <td><span class="badge bg-danger">55%</span></td>
-                    </tr>
-                    <tr>
-                      <td>Dislikes</td>
-                      <td>
-                        <div class="progress progress-xs">
-                          <div class="progress-bar bg-danger" style="width: 70%"></div>
+                      </div>
+                      <div class="col-6">
+                        <div class="info-box bg-light">
+                          <div class="info-box-content">
+                            <span class="info-box-text text-center text-muted">Reads</span>
+                            <span class="info-box-number text-center text-muted mb-0" id="totalreads">0</span>
+                          </div>
                         </div>
-                      </td>
-                      <td><span class="badge bg-danger">70%</span></td>
-                    </tr>
-                    <tr>
-                      <td>Pending Post</td>
-                      <td>
-                        <div class="progress progress-xs progress-striped active">
-                          <div class="progress-bar bg-warning" style="width: 30%"></div>
-                        </div>
-                      </td>
-                      <td><span class="badge bg-warning">30%</span></td>
-                    </tr>
-                  </tbody>
-                </table>
+                      </div>
+                    </div> 
+                  </div>
+                </div>
+              </div>
+              <div class="card-footer">
+                <div class="float-right">
+                  <a type="button" href="?profile" class="btn btn-default">View All Stats</a>
+                </div>
               </div>
             </div>
           </div>
@@ -135,6 +130,7 @@ $( document ).ready(function() {
   search();
   updateConfig();
   GetArticle();
+  GetTotalPostandReads();
   $( "#search" ).change(function() {
     GetArticle($( "#search" ).val());
   });
@@ -225,6 +221,35 @@ function request(art_id) {
   });
 }
 
+function saveart(id) {
+  $.ajax({
+      url:"actions/?savelist",
+      method:"POST",
+      data:{art_id:id},
+      success:function(data){
+        alert("Success");
+      }
+
+  });
+}
+
+
+function GetTotalPostandReads() {
+  $.ajax({
+      url:"actions/?getpostandreads",
+      method:"POST",
+      dataType: "json",
+      success:function(data){
+        $("#totalpost").text(data[0]['totalpost']);
+        $("#totalreads").text(data[0]['totalreads']);
+      }
+
+  });
+}
+
+function downloadFile(id) {
+  window.open("actions/?dlfileann="+id, '_blank');
+}
 </script>
 </body>
 </html>

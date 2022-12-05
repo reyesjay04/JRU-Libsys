@@ -2,11 +2,22 @@
 <?php 
 
 if($_GET['avl'] == "PRIV") {
-  if(CheckUserAccess($_GET['viewarticle']) == 0) {
-    header("Location: ?dashboard");
+
+  $author_list = GetAuthors($_GET['viewarticle']);
+  
+  $authorArr = array();
+  
+  foreach($author_list as $authors){ 
+      $authorArr[] = $authors['user_id'];
+  }
+
+  if(!in_array($_SESSION['USER_ID'], $authorArr)) {
+    if(CheckUserAccess($_GET['viewarticle']) == 0) {
+      header("Location: ?dashboard");
+    }
   }
 }
-
+UpdateArticleViewCount($_GET['viewarticle']);
 ?>
 <body class="hold-transition layout-top-nav">
 <div class="wrapper">
@@ -32,7 +43,7 @@ if($_GET['avl'] == "PRIV") {
         <div class="row">   
           <div class="col-md-12">
             <div class="card">
-            <div class="card-header">
+              <div class="card-header">
                 <h3 class="card-title">Article Details</h3>
               </div>
                 <div class="tab-content">
@@ -41,6 +52,22 @@ if($_GET['avl'] == "PRIV") {
                   </div>
                 </div>       
             </div>
+          </div>
+        </div>
+        <hr>
+        <div class="container">
+          <div class="row mb-2">
+            <div class="col-sm-6">
+              <h4 class="m-0"> Recommendation</h4>
+            </div>
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="col-12">
+            <div class="row" id ="recommendations">
+
+            </div> 
           </div>
         </div>
       </div>
@@ -59,6 +86,7 @@ if($_GET['avl'] == "PRIV") {
 $( document ).ready(function() {
   GetArticle();
   $( "#target" ).select();
+  Recommendations();
   $("#star5").click(function(){
     alert(1);
   });
@@ -174,6 +202,19 @@ function rate(id) {
       }
   }); 
 }
+
+function Recommendations() {
+  $.ajax({
+      url:"actions/?recommendations",
+      method:"POST",
+      data: {viewarticle:<?php echo $_GET['viewarticle']?>},
+      success:function(data){
+        $("#recommendations").empty();
+        $("#recommendations").append(data);
+      }
+  });
+}
+
 </script>
 </body>
 </html>

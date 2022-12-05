@@ -56,8 +56,15 @@ foreach($responselist as $response){
             <?php $author_list = $response['author_list'];?>
             <?php 
                 $appendNames = "";
+                $authorArr = array();
                 foreach($author_list as $authors){ 
-                    $appendNames .= $authors['first_name'].' '. $authors['last_name'].', ';
+                    $authorArr[] = $authors['user_id'];
+                    if ($authors['user_id'] !== $_SESSION['USER_ID']) {
+                        $appendNames .= '<a href="?profile='.$authors['user_id'].'">'.$authors['first_name'].' '. $authors['last_name'].'</a>, ';
+                    } else {
+                        $appendNames .= '<a href="?profile">'.$authors['first_name'].' '. $authors['last_name'].'</a>, ';
+                    }
+                    
                 } 
             ?>
             <span class="description"><?php echo 'Authors: '.rtrim($appendNames,", "). ' | Availability: '. $availability;  ?></span>
@@ -68,22 +75,31 @@ foreach($responselist as $response){
         <p>
             <?php 
                 switch ($response['availability']) {
-                    case "PUB";
+                    case "PUB";         
                         echo '<a href="?viewarticle='.$articleID.'&avl='.$response['availability'].'" class="link-black text-sm mr-2"><i class="fas fa-share mr-1"></i> View Article</a>';
+                        echo '<a onclick="saveart(this.id)" id="'.$articleID.'"  href="#" class="link-black text-sm mr-2"><i class="fas fa-save mr-1"></i> Save Article</a>';
                     break;
                     case "PRIV";
-                        if(CheckUserAccess($articleID) > 0) {
-                            if(CheckUserAccessStatus($articleID) > 0) {
-                                echo '<a href="?viewarticle='.$articleID.'&avl='.$response['availability'].'" class="link-black text-sm mr-2"><i class="fas fa-share mr-1"></i> View Article</a>';
-                            } else {
-                                echo '<div class="col-2"><button class="btn btn-block btn-warning btn-xs"><i class="fas fa-user-secret mr-1"></i>Waiting for approval</button></div>';
-                            }
+
+                        if(in_array($_SESSION['USER_ID'], $authorArr)) {
+                            echo '<a href="?viewarticle='.$articleID.'&avl='.$response['availability'].'" class="link-black text-sm mr-2"><i class="fas fa-share mr-1"></i> View Article</a>';
+                            echo '<a onclick="saveart(this.id)" id="'.$articleID.'"  href="#" class="link-black text-sm mr-2"><i class="fas fa-save mr-1"></i> Save Article</a>';
                         } else {
-                            echo '<div class="col-2"><button class="btn btn-block btn-secondary btn-xs" id="'.$articleID.'" onclick="request(this.id)"><i class="fas fa-user-secret mr-1"></i>Request access</button></div>';
+                            if(CheckUserAccess($articleID) > 0) {
+                                if(CheckUserAccessStatus($articleID) > 0) {
+                                    echo '<a href="?viewarticle='.$articleID.'&avl='.$response['availability'].'" class="link-black text-sm mr-2"><i class="fas fa-share mr-1"></i> View Article</a>';
+                                    echo '<a onclick="saveart(this.id)" id="'.$articleID.'"  href="#" class="link-black text-sm mr-2"><i class="fas fa-save mr-1"></i> Save Article</a>';
+                                } else {
+                                    echo '<div class="col-2"><button class="btn btn-block btn-warning btn-xs"><i class="fas fa-user-secret mr-1"></i>Waiting for approval</button></div>';
+                                }
+                            } else {
+                                echo '<div class="col-2"><button class="btn btn-block btn-secondary btn-xs" id="'.$articleID.'" onclick="request(this.id)"><i class="fas fa-user-secret mr-1"></i>Request access</button></div>';
+                            }
                         }
+
                     break;
                     default:
-                        echo '123123';
+                        echo 'else';
                     break;
                 }
             ?>    

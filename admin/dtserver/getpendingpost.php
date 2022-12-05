@@ -23,7 +23,7 @@ $columns = array(
                 case "PUB";
                     return "PUBLIC";
                 break;
-                case "PR";
+                case "PRIV";
                     return "PRIVATE";
                 break;
                 case "BOTH";

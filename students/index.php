@@ -21,7 +21,10 @@ if(isset($_SESSION['USER_ROLE'])) {
             break;
             case $LIB_SYS_DIR_STUD."?profile";
                 include 'pages/profile.php';
-        break;
+            break;
+            case $LIB_SYS_DIR_STUD."?profile=".(isset($_GET['profile']) ? $_GET['profile'] : "");
+                include 'pages/other-profile.php';
+            break;
             case $LIB_SYS_DIR_STUD."?viewarticle=".$_GET['viewarticle']."&avl=".$_GET['avl'];
                 include 'pages/view-article.php';
             break;
@@ -48,4 +51,12 @@ function logout() {
 
     });
 }
+function checkUnseenNotif() {
+    
+}
+setInterval(function(){
+        checkUnseenNotif();
+}, 3000);
+
+
 </script>

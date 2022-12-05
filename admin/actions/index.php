@@ -72,8 +72,11 @@ if(isset($_GET['login'])) {
 
     include 'disapprovepost.php';
 
-}
+} else if(isset($_GET['addannouncement']))  { 
 
+    include 'addannouncement.php';
+
+}
 
 
 

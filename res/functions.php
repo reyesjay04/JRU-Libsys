@@ -505,7 +505,7 @@ function SearchAuthors($keyword) {
     $pdo = Database::getConnection();
 
     $numberofrecords = 10;
-    $stmt = $pdo->prepare("SELECT * FROM users WHERE first_name LIKE :keyword or last_name LIKE :keyword LIMIT :limit");
+    $stmt = $pdo->prepare("SELECT * FROM users WHERE isconfig = 'Y' AND first_name LIKE :keyword or last_name LIKE :keyword LIMIT :limit");
 	
     $stmt->bindValue(':keyword', '%'.$keyword.'%', PDO::PARAM_STR);
 	$stmt->bindValue(':limit', (int)$numberofrecords, PDO::PARAM_INT);
@@ -802,6 +802,13 @@ function GetUserArticleRating($art_id) {
     $data = $stmt->fetchcolumn(); 
     return $data;
 }
+
+function UpdateArticleViewCount($art_id) {
+    require_once("connection.php");
+    $pdo = Database::getConnection(); 
+    $stmt = $pdo->prepare("UPDATE `articles` SET view_count = (view_count + 1) WHERE id = :art_id");
+    $stmt->execute(["art_id" => $art_id]);
+}
 #endregion
 
 
@@ -834,4 +841,285 @@ function CancelRequest($art_id) {
 
 #endregion
 
+#region Profile
+function GetUserStudentProfile($user_id) {
+    require_once("connection.php");
+    $pdo = Database::getConnection();
+
+    $sql = "SELECT u.first_name as FirstName, u.last_name as LastName, cs.course as Course, dept.name as Department, u.picture, u.user_role,
+    u.email as EmailAdd, u.contact_number as Contact, COUNT(art.id) as TotalArticles, (SUM(rt.rate_val) / SUM(rt.rate_base) * 5) as RateRatio
+    FROM users as u 
+    LEFT JOIN course cs on cs.code = u.course_code
+    LEFT JOIN department dept on dept.code = u.department_code
+    LEFT JOIN articles as art on art.main_author_id = u.id AND art.status = 'Y'
+    LEFT JOIN ratings as rt on rt.article_id = art.id AND rt.user_id = u.id
+    LEFT JOIN no_likes nl on nl.user_id = u.id
+    LEFT JOIN dislikes dl on dl.user_id = u.id
+    WHERE u.isconfig = 'Y' AND u.id = :user_id
+    GROUP BY u.id";
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute(["user_id" => $user_id]);
+    $data = $stmt->fetchAll();
+    $response = array();
+    foreach($data as $profile){
+        
+        $response[] = array(
+            "FirstName" => $profile['FirstName'],
+            "LastName" => $profile['LastName'],
+            "Role" => $profile['user_role'],
+            "course" => $profile['Course'],
+            "department" => $profile['Department'],
+            "emailadd" => $profile['EmailAdd'],
+            "contact" => $profile['Contact'],
+            "totalpost" => $profile['TotalArticles'],
+            "picture" => $profile['picture'],
+            "totalratings" => $profile['RateRatio'],
+            "totallikes" => GetCurrentUserLikes($user_id),
+            "totaldislikes" => GetCurrentUserDislikes($user_id),
+        );
+    }
+    return $response;
+}
+
+function GetCurrentUserLikes($user_id) {
+
+    require_once("connection.php");
+    $pdo = Database::getConnection();  
+    $stmt = $pdo->prepare("SELECT COUNT(user_id) FROM no_likes WHERE user_id = :user_id");
+    $stmt->execute(['user_id' => $user_id]); 
+    $row = $stmt->fetchcolumn();
+    return $row;
+
+}
+
+function GetCurrentUserDislikes($user_id) {
+
+    require_once("connection.php");
+    $pdo = Database::getConnection();  
+    $stmt = $pdo->prepare("SELECT COUNT(user_id) FROM dislikes WHERE user_id = :user_id");
+    $stmt->execute(['user_id' => $user_id]); 
+    $row = $stmt->fetchcolumn();
+    return $row;
+
+}
+function GetUserStudentProfileForForm($user_id) {
+    require_once("connection.php");
+    $pdo = Database::getConnection();
+
+    $sql = "SELECT u.first_name as FirstName, u.last_name as LastName, u.course_code as Course, u.department_code as Department, u.picture, u.user_role,
+    u.email as EmailAdd, u.contact_number as Contact, u.gender , u.reference_id
+    FROM users as u 
+    WHERE u.isconfig = 'Y' AND u.id = :user_id
+    GROUP BY u.id";
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute(["user_id" => $user_id]);
+    $data = $stmt->fetchAll();
+    $response = array();
+    foreach($data as $profile){
+             
+        $response[] = array(
+            "reference_id" => $profile['reference_id'],
+            "FirstName" => $profile['FirstName'],
+            "LastName" => $profile['LastName'],
+            "Role" => $profile['user_role'],
+            "course" => $profile['Course'],
+            "department" => $profile['Department'],
+            "emailadd" => $profile['EmailAdd'],
+            "contact" => $profile['Contact'],
+            "picture" => $profile['picture'],
+            "gender" => $profile['gender'],
+        );
+    }
+    return $response;
+}
+function UpdateUserProfile($data) {
+
+    $data['user_id'] = $_SESSION['USER_ID'];
+
+
+    require_once("connection.php");
+    $pdo = Database::getConnection(); 
+
+    $updateProfile = "";
+    if(isset($data['picture'])) {
+        $updateProfile = "picture = :picture,";
+    }
+
+    $sql = "UPDATE users SET reference_id = :reference_id, first_name = :first_name,
+            last_name = :last_name, last_name = :last_name, gender = :gender,
+            course_code  = :course ,department_code  = :dept, $updateProfile contact_number  = :contact 
+        WHERE id = :user_id";
+
+    $stmt = $pdo->prepare($sql);
+
+    $stmt->execute($data);
+
+    $_SESSION['USER_FIRST'] = $data['first_name'];
+    $_SESSION['USER_LAST'] = $data['last_name'];   
+
+    if(isset($data['picture'])) {
+        $_SESSION['USER_PICTURE'] = $data['picture']; 
+    }
+
+
+}
+
+function GetRequestArticle($user_id) {
+
+    require_once("connection.php");
+    $pdo = Database::getConnection();  
+ 
+    $sql = "SELECT art.id, u.id as user_id, art.title, u.first_name, u.last_name, u.picture, acc.requested_at FROM article_access acc 
+            LEFT JOIN articles art on art.id = acc.art_id
+            LEFT JOIN users u ON u.id = acc.user_id
+            WHERE art.main_author_id = :user_id AND acc.status = 'N'";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute(["user_id" => $user_id]);
+
+    $data = $stmt->fetchAll();
+    $stmt->closeCursor();
+    return $data;
+
+}
+
+function AcceptRequest($user_id, $art_id) {
+    require_once("connection.php");
+    $pdo = Database::getConnection();  
+
+    $stmt = $pdo->prepare("UPDATE article_access SET status = 'Y' WHERE art_id = :art_id AND user_id = :user_id");
+    $stmt->execute(['art_id' => $art_id, "user_id" => $user_id]); 
+
+}
+#endregion
+
+#region SaveList
+function SaveArticle($art_id) {
+    require_once("connection.php");
+    $pdo = Database::getConnection();  
+    $sql = "SELECT id FROM save_list WHERE art_id = :art_id AND user_id = :user_id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute(["art_id" => $art_id, "user_id" => $_SESSION['USER_ID']]);
+    $data = $stmt->fetchcolumn(); 
+
+    if($data < 1) {
+        $postData = [
+            'art_id' => $art_id, 
+            "user_id" => $_SESSION['USER_ID'],
+        ];
+        $stmt = $pdo->prepare("INSERT INTO `save_list` (art_id, user_id) VALUES (:art_id, :user_id)");
+        $stmt->execute($postData);
+    }
+
+}
+
+function GetPostandReads() {
+    require_once("connection.php");
+    $pdo = Database::getConnection();
+
+    $sql = "SELECT COUNT(id) as totalpost, SUM(view_count) as totalreads FROM articles WHERE main_author_id = :user_id AND status = 'Y'";
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute(["user_id" => $_SESSION['USER_ID']]);
+    $data = $stmt->fetchAll();
+    $response = array();
+    foreach($data as $profile){
+        
+        $response[] = array(
+            "totalpost" => $profile['totalpost'],
+            "totalreads" => $profile['totalreads'],
+        );
+    }
+    return $response;
+
+}
+
+function GetSavedArticle($user_id) {
+
+    require_once("connection.php");
+    $pdo = Database::getConnection();  
+ 
+    $sql = "SELECT art.* FROM `save_list` sl LEFT JOIN articles art on art.id = sl.art_id WHERE sl.user_id = :user_id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute(["user_id" => $user_id]);
+
+    $data = $stmt->fetchAll();
+    $stmt->closeCursor();
+    return $data;
+
+}
+
+
+#endregion
+#region Categories
+function AddAnnouncements($data) {
+
+    require_once("connection.php");
+    $pdo = Database::getConnection();
+    $sql = "SELECT id FROM announcement WHERE id = 1";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+    $result = $stmt->fetchcolumn(); 
+    $data['created_at'] = FullDateFormat24HR();
+
+    try {
+        if($result < 1) {  
+            $stmt = $pdo->prepare("INSERT INTO `announcement` (`title`, `description`, `filename`, `attachment`, `created_at`) VALUES (:title, :description, :filename, :attachment, :created_at)");
+            $stmt->execute($data);
+        } else {
+            $stmt = $pdo->prepare("UPDATE `announcement` SET title = :title, description = :description, filename = :filename, attachment = :attachment, created_at = :created_at WHERE id = 1");
+            $stmt->execute($data);
+        }
+    } catch (Exception $e) {
+        echo 'Caught exception: ',  $e->getMessage(), "\n";
+    }
+
+}
+
+function RetrieveAnnouncement() {
+    require_once("connection.php");
+    $pdo = Database::getConnection();
+
+    $sql = "SELECT * FROM announcement WHERE id = 1";
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+    $data = $stmt->fetchAll();
+    $response = array();
+
+    foreach($data as $announcement){
+        
+        $response[] = array(
+            "title" => $announcement['title'],
+            "description" => $announcement['description'],
+            "filename" => $announcement['filename'],
+            "attachment" => $announcement['attachment'],
+        );
+    }
+    return $response;
+}
+
+#endregion
+#region Recommendation
+function Recommendations() {
+
+    require_once("connection.php");
+    $pdo = Database::getConnection();  
+
+    $sql = "SELECT art.*, (SUM(rt.rate_val) / SUM(rt.rate_base) * 5) as Rate, SUM(nl.id) as Likes, SUM(nl.id) as DisLikes FROM articles art 
+    LEFT JOIN ratings rt ON rt.article_id = art.id
+    LEFT JOIN no_likes nl ON nl.article_id = art.id
+    LEFT JOIN dislikes dl ON dl.article_id = art.id
+    WHERE art.status = 'Y' AND art.availability IN ('PUB','BOTH')
+    GROUP BY art.id
+    ORDER BY Rate DESC LIMIT 4";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+
+    $data = $stmt->fetchAll();
+    $stmt->closeCursor();
+    return $data;
+
+}
 ?>

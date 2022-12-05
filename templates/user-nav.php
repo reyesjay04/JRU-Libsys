@@ -16,7 +16,7 @@
             <a href="?post" class="nav-link <?php echo ($_SERVER['REQUEST_URI'] == $LIB_SYS_DIR_STUD."?post" ? "active" : "" )?>">Post</a>
           </li>
           <li class="nav-item">
-            <a href="?request" class="nav-link <?php echo ($_SERVER['REQUEST_URI'] == $LIB_SYS_DIR_STUD."?request" ? "active" : "" )?>">Request</a>
+            <a href="?request" class="nav-link <?php echo ($_SERVER['REQUEST_URI'] == $LIB_SYS_DIR_STUD."?request" ? "active" : "" )?>">Pending Request</a>
           </li>
         </ul>
       </div>
