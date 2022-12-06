@@ -536,8 +536,7 @@ function AddPost($postDetails, $authorList) {
         $sql = "INSERT INTO articles 
                     (`title`, `dept_code`, `cat_code`, `content`, `file`, `availability`, `main_author_id`, `keyword`, `created_at`) 
                 VALUES 
-                    (:title, :dept_code, :cat_code, :content, :file, :availability, :main_author_id, :keyword, :created_at)";
-                    
+                    (:title, :dept_code, :cat_code, :content, :file, :availability, :main_author_id, :keyword, :created_at)";                  
         
         $stmt = $pdo->prepare($sql);
         $pdo->beginTransaction();
@@ -561,14 +560,15 @@ function AddAuthorList($pdo, $art_id, $authorList, $main_author) {
     }    
         
     foreach($authorList as $authors){
-        
          $sql = "INSERT INTO author_list (`art_id`, `user_id`) VALUES (:art_id, :user_id);";
          $stmt = $pdo->prepare($sql);
          $pdo->beginTransaction();
          $stmt->execute(["art_id" => $art_id, "user_id" => $authors['id']]);
          $pdo->commit();
     }
-    
+
+    AddNotification("NEW ARTICLE", $art_id);
+ 
 }
 
 
@@ -1107,10 +1107,8 @@ function Recommendations() {
     require_once("connection.php");
     $pdo = Database::getConnection();  
 
-    $sql = "SELECT art.*, (SUM(rt.rate_val) / SUM(rt.rate_base) * 5) as Rate, SUM(nl.id) as Likes, SUM(nl.id) as DisLikes FROM articles art 
+    $sql = "SELECT art.*, (SUM(rt.rate_val) / SUM(rt.rate_base) * 5) as Rate, (SELECT COUNT(id) FROM no_likes WHERE article_id = art.id) as Likes, (SELECT COUNT(id) FROM dislikes WHERE article_id = art.id) as DisLikes FROM articles art 
     LEFT JOIN ratings rt ON rt.article_id = art.id
-    LEFT JOIN no_likes nl ON nl.article_id = art.id
-    LEFT JOIN dislikes dl ON dl.article_id = art.id
     WHERE art.status = 'Y' AND art.availability IN ('PUB','BOTH')
     GROUP BY art.id
     ORDER BY Rate DESC LIMIT 4";
@@ -1122,4 +1120,84 @@ function Recommendations() {
     return $data;
 
 }
+#endregion
+
+
+#region Recommendation
+function AddNotification($action, $art_id) {
+    require_once("connection.php");
+    $pdo = Database::getConnection();  
+
+    $toNotiflist = FetchUserToNotif($art_id);
+    
+    foreach($toNotiflist as $notify) {
+        $data = [
+            "type" => $action,
+            "to_user_id" => $notify['user_id'],
+            "from_user_id" => $_SESSION['USER_ID'],
+            "created_at" => FullDateFormat24HR(),
+        ];
+
+        if($notify['user_id'] !== $_SESSION['USER_ID']) {
+            $stmt = $pdo->prepare("INSERT INTO `notification` (`type`, `to_user_id`, `from_user_id`, `created_at`) VALUES (:type, :to_user_id, :from_user_id, :created_at)");
+            $stmt->execute($data);
+        }
+       
+    }
+}
+
+function FetchUserToNotif($art_id) {
+    require_once("connection.php");
+    $pdo = Database::getConnection();  
+
+    $sql = "SELECT user_id FROM author_list WHERE art_id = :art_id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute(["art_id" => $art_id]);
+    $data = $stmt->fetchAll();
+    return $data;
+}
+
+function GetNotification() {
+    require_once("connection.php");
+    $pdo = Database::getConnection();  
+    $sql = "SELECT id, type, created_at FROM notification WHERE to_user_id = :user_id AND status = 'N' ORDER by created_at DESC LIMIT 15";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute(["user_id" => $_SESSION['USER_ID']]);
+    $data = $stmt->fetchAll();
+    $stmt->closeCursor();
+    return $data;
+}
+
+function SeenNotification($id) {
+    require_once("connection.php");
+    $pdo = Database::getConnection();  
+
+    $stmt = $pdo->prepare("UPDATE notification SET status = 'Y' WHERE id = :id");
+    $stmt->execute(["id" => $id]);     
+}
+
+function time_since($since) {
+    $chunks = array(
+        array(60 * 60 * 24 * 365 , 'year'),
+        array(60 * 60 * 24 * 30 , 'month'),
+        array(60 * 60 * 24 * 7, 'week'),
+        array(60 * 60 * 24 , 'day'),
+        array(60 * 60 , 'hour'),
+        array(60 , 'minute'),
+        array(1 , 'second')
+    );
+
+    for ($i = 0, $j = count($chunks); $i < $j; $i++) {
+        $seconds = $chunks[$i][0];
+        $name = $chunks[$i][1];
+        if (($count = floor($since / $seconds)) != 0) {
+            break;
+        }
+    }
+
+    $print = ($count == 1) ? '1 '.$name : "$count {$name}s";
+    return $print;
+}
+#endregion
+
 ?>

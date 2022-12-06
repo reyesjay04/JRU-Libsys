@@ -26,5 +26,6 @@ switch ($rating) {
 }
 
 echo RateArticle($art_id, $ratingOfficial);
+AddNotification("RATE", $art_id);
 
 ?>

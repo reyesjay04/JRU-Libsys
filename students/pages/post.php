@@ -189,7 +189,11 @@ $(function () {
       },
       keywords: {
         required: true
+      },   
+      fileupload: {
+        required: true
       },
+      
     },
 
     messages: {

@@ -41,21 +41,55 @@ if(isset($_SESSION['USER_ROLE'])) {
 ?>
 
 <script>
+
+$( document ).ready(function() {
+    countNewNotif();
+    checkUnseenNotif();
+}); 
 function logout() {
     $.ajax({
       url:"actions/?logout",
       success:function(data){
         window.location.replace('<?php echo $LIB_SYS_DIR_STUD?>');
-
       }
-
     });
 }
-function checkUnseenNotif() {
-    
+
+function countNewNotif() {
+    $.ajax({
+      url:"actions/?countnotify",
+      success:function(data){
+        $("#notifcount").text(data);
+      }
+    });
 }
+
+function checkUnseenNotif() {
+    $.ajax({
+      url:"actions/?notify",
+      success:function(data){
+        $("#notif").empty();
+        $("#notif").append(data);
+      }
+    });
+}
+
+function seennotif(id) {
+    $.ajax({
+      url:"actions/?seennotif",
+      data: {id:id},
+      method: "POST",
+      success:function(data){
+        $("#notif").empty();
+        $("#notif").append(data);     
+        countNewNotif();
+     }
+    });
+}
+
 setInterval(function(){
-        checkUnseenNotif();
+    countNewNotif();
+    checkUnseenNotif();
 }, 3000);
 
 

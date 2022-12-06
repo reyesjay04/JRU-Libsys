@@ -109,6 +109,20 @@ if(isset($_GET['getdept'])) {
 } else if(isset($_GET['acceptrequest']) || isset($_GET['art_id'])) {
 
     include 'acceptrequest.php';
+
+} else if(isset($_GET['notify'])) {
+    
+    include 'notify.php';
+
+} else if(isset($_GET['countnotify'])) {
+    
+    include 'countnotify.php';
+
+} else if(isset($_GET['seennotif'])) {
+    
+    include 'seennotif.php';
+
 }
+
 
 ?>

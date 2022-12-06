@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.2
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 05, 2022 at 01:06 PM
--- Server version: 10.4.13-MariaDB
--- PHP Version: 7.4.7
+-- Generation Time: Dec 06, 2022 at 02:57 PM
+-- Server version: 8.0.19
+-- PHP Version: 8.1.6
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -20,7 +20,7 @@ SET time_zone = "+00:00";
 --
 -- Database: `jrurepo`
 --
-CREATE DATABASE IF NOT EXISTS `jrurepo` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+CREATE DATABASE IF NOT EXISTS `jrurepo` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
 USE `jrurepo`;
 
 -- --------------------------------------------------------
@@ -31,7 +31,7 @@ USE `jrurepo`;
 
 DROP TABLE IF EXISTS `admin`;
 CREATE TABLE IF NOT EXISTS `admin` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `username` varchar(50) NOT NULL,
   `password` text NOT NULL,
   `firstname` varchar(50) NOT NULL,
@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS `admin` (
   `created_at` datetime NOT NULL,
   `status` varchar(1) NOT NULL DEFAULT 'Y',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `admin`
@@ -57,14 +57,14 @@ INSERT INTO `admin` (`id`, `username`, `password`, `firstname`, `lastname`, `ema
 
 DROP TABLE IF EXISTS `announcement`;
 CREATE TABLE IF NOT EXISTS `announcement` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `title` text NOT NULL,
   `description` text NOT NULL,
   `filename` varchar(100) NOT NULL,
   `attachment` text NOT NULL,
   `created_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `announcement`
@@ -81,31 +81,31 @@ INSERT INTO `announcement` (`id`, `title`, `description`, `filename`, `attachmen
 
 DROP TABLE IF EXISTS `articles`;
 CREATE TABLE IF NOT EXISTS `articles` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `title` varchar(100) NOT NULL,
   `dept_code` varchar(10) NOT NULL,
   `cat_code` varchar(10) NOT NULL,
   `content` text NOT NULL,
   `file` varchar(100) NOT NULL,
   `availability` varchar(10) NOT NULL,
-  `view_count` int(11) NOT NULL DEFAULT 0,
-  `download_count` int(11) NOT NULL DEFAULT 0,
-  `main_author_id` int(11) NOT NULL,
+  `view_count` int NOT NULL DEFAULT '0',
+  `download_count` int NOT NULL DEFAULT '0',
+  `main_author_id` int NOT NULL,
   `keyword` text NOT NULL,
   `created_at` datetime NOT NULL,
-  `updated_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `status` varchar(1) NOT NULL DEFAULT 'N',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `articles`
 --
 
 INSERT INTO `articles` (`id`, `title`, `dept_code`, `cat_code`, `content`, `file`, `availability`, `view_count`, `download_count`, `main_author_id`, `keyword`, `created_at`, `updated_at`, `status`) VALUES
-(1, 'VB.net', 'CSE', 'BSCpE', 'VB.Net is a simple, modern, object-oriented computer programming language developed by Microsoft to combine the power of .NET Framework and the common language runtime with the productivity benefits that are the hallmark of Visual Basic. This tutorial will teach you basic VB.Net programming and will also take you through various advanced concepts related to VB.Net programming language.', 'boxed-bg638da52e9c1a2.jpg', 'PUB', 62, 0, 5, 'vb', '2022-12-05 16:00:46', '2022-12-05 16:01:05', 'Y'),
-(2, 'PHP', 'CSE', 'BSCpE', 'ca', 'avatar5638dc5afdc129.png', 'PUB', 53, 0, 1, 'php', '2022-12-05 18:19:27', '2022-12-05 18:19:35', 'Y'),
-(3, 'Private Sample', 'AEP', 'BSED', 'Private Sample', 'avatar5638dc9881c8ed.png', 'PRIV', 31, 0, 1, 'Private Sample', '2022-12-05 18:35:52', '2022-12-05 18:36:46', 'Y');
+(1, 'VB.net', 'CSE', 'BSCpE', 'VB.Net is a simple, modern, object-oriented computer programming language developed by Microsoft to combine the power of .NET Framework and the common language runtime with the productivity benefits that are the hallmark of Visual Basic. This tutorial will teach you basic VB.Net programming and will also take you through various advanced concepts related to VB.Net programming language.', 'boxed-bg638da52e9c1a2.jpg', 'PUB', 87, 0, 5, 'vb', '2022-12-05 16:00:46', '2022-12-05 16:01:05', 'Y'),
+(2, 'PHP', 'CSE', 'BSCpE', 'ca', 'avatar5638dc5afdc129.png', 'PUB', 68, 0, 1, 'php', '2022-12-05 18:19:27', '2022-12-05 18:19:35', 'Y'),
+(3, 'Private Sample', 'AEP', 'BSED', 'Private Sample', 'avatar5638dc9881c8ed.png', 'PRIV', 36, 0, 1, 'Private Sample', '2022-12-05 18:35:52', '2022-12-05 18:36:46', 'Y');
 
 -- --------------------------------------------------------
 
@@ -115,13 +115,13 @@ INSERT INTO `articles` (`id`, `title`, `dept_code`, `cat_code`, `content`, `file
 
 DROP TABLE IF EXISTS `article_access`;
 CREATE TABLE IF NOT EXISTS `article_access` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `art_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `requested_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `id` int NOT NULL AUTO_INCREMENT,
+  `art_id` int NOT NULL,
+  `user_id` int NOT NULL,
+  `requested_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `status` varchar(1) NOT NULL DEFAULT 'N',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `article_access`
@@ -138,11 +138,11 @@ INSERT INTO `article_access` (`id`, `art_id`, `user_id`, `requested_at`, `status
 
 DROP TABLE IF EXISTS `author_list`;
 CREATE TABLE IF NOT EXISTS `author_list` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `art_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `art_id` int NOT NULL,
+  `user_id` int NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `author_list`
@@ -163,17 +163,17 @@ INSERT INTO `author_list` (`id`, `art_id`, `user_id`) VALUES
 
 DROP TABLE IF EXISTS `categories`;
 CREATE TABLE IF NOT EXISTS `categories` (
-  `cat_id` int(11) NOT NULL AUTO_INCREMENT,
+  `cat_id` int NOT NULL AUTO_INCREMENT,
   `cat_code` varchar(10) NOT NULL,
   `cat_name` varchar(50) NOT NULL,
   `created_by` varchar(50) NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_by` varchar(50) DEFAULT NULL,
-  `updated_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `status` varchar(1) NOT NULL DEFAULT 'Y',
   PRIMARY KEY (`cat_id`),
   UNIQUE KEY `cat_code` (`cat_code`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `categories`
@@ -198,13 +198,13 @@ INSERT INTO `categories` (`cat_id`, `cat_code`, `cat_name`, `created_by`, `creat
 
 DROP TABLE IF EXISTS `citations`;
 CREATE TABLE IF NOT EXISTS `citations` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `article_id` int(11) NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `article_id` int NOT NULL,
   `link` text NOT NULL,
-  `user_id` int(11) NOT NULL,
+  `user_id` int NOT NULL,
   `created_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -214,13 +214,13 @@ CREATE TABLE IF NOT EXISTS `citations` (
 
 DROP TABLE IF EXISTS `comments`;
 CREATE TABLE IF NOT EXISTS `comments` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `article_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `article_id` int NOT NULL,
+  `user_id` int NOT NULL,
   `comment` text NOT NULL,
   `created_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -230,18 +230,18 @@ CREATE TABLE IF NOT EXISTS `comments` (
 
 DROP TABLE IF EXISTS `course`;
 CREATE TABLE IF NOT EXISTS `course` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `dept_code` varchar(20) NOT NULL,
   `code` varchar(10) NOT NULL,
   `course` varchar(100) NOT NULL,
   `created_by` varchar(50) NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_by` varchar(50) DEFAULT NULL,
-  `updated_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `status` varchar(1) NOT NULL DEFAULT 'Y',
   PRIMARY KEY (`id`),
   UNIQUE KEY `code` (`code`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `course`
@@ -266,17 +266,17 @@ INSERT INTO `course` (`id`, `dept_code`, `code`, `course`, `created_by`, `create
 
 DROP TABLE IF EXISTS `department`;
 CREATE TABLE IF NOT EXISTS `department` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `code` varchar(50) NOT NULL,
   `name` varchar(100) NOT NULL,
   `created_at` datetime NOT NULL,
   `created_by` varchar(50) NOT NULL,
-  `updated_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_by` varchar(20) DEFAULT NULL,
   `status` varchar(1) NOT NULL DEFAULT 'Y',
   PRIMARY KEY (`id`),
   UNIQUE KEY `code` (`code`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `department`
@@ -295,11 +295,43 @@ INSERT INTO `department` (`id`, `code`, `name`, `created_at`, `created_by`, `upd
 
 DROP TABLE IF EXISTS `dislikes`;
 CREATE TABLE IF NOT EXISTS `dislikes` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `article_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `article_id` int NOT NULL,
+  `user_id` int NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `dislikes`
+--
+
+INSERT INTO `dislikes` (`id`, `article_id`, `user_id`) VALUES
+(5, 3, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `notification`
+--
+
+DROP TABLE IF EXISTS `notification`;
+CREATE TABLE IF NOT EXISTS `notification` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `type` varchar(20) NOT NULL,
+  `to_user_id` int NOT NULL,
+  `from_user_id` int NOT NULL,
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `status` varchar(1) NOT NULL DEFAULT 'N',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `notification`
+--
+
+INSERT INTO `notification` (`id`, `type`, `to_user_id`, `from_user_id`, `created_at`, `status`) VALUES
+(1, 'LIKE', 1, 5, '2022-12-06 21:56:58', 'Y'),
+(2, 'LIKE', 5, 1, '2022-12-06 21:38:34', 'N');
 
 -- --------------------------------------------------------
 
@@ -309,18 +341,19 @@ CREATE TABLE IF NOT EXISTS `dislikes` (
 
 DROP TABLE IF EXISTS `no_likes`;
 CREATE TABLE IF NOT EXISTS `no_likes` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `article_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `article_id` int NOT NULL,
+  `user_id` int NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `no_likes`
 --
 
 INSERT INTO `no_likes` (`id`, `article_id`, `user_id`) VALUES
-(1, 3, 1);
+(5, 1, 1),
+(6, 2, 1);
 
 -- --------------------------------------------------------
 
@@ -330,14 +363,14 @@ INSERT INTO `no_likes` (`id`, `article_id`, `user_id`) VALUES
 
 DROP TABLE IF EXISTS `ratings`;
 CREATE TABLE IF NOT EXISTS `ratings` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `article_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `rate_val` int(11) NOT NULL,
-  `rate_base` int(11) NOT NULL DEFAULT 5,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `article_id` int NOT NULL,
+  `user_id` int NOT NULL,
+  `rate_val` int NOT NULL,
+  `rate_base` int NOT NULL DEFAULT '5',
   `created_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `ratings`
@@ -346,7 +379,7 @@ CREATE TABLE IF NOT EXISTS `ratings` (
 INSERT INTO `ratings` (`id`, `article_id`, `user_id`, `rate_val`, `rate_base`, `created_at`) VALUES
 (1, 1, 1, 2, 5, '2022-12-05 18:19:04'),
 (2, 2, 1, 1, 5, '2022-12-05 18:19:44'),
-(3, 3, 1, 2, 5, '2022-12-05 19:07:47'),
+(3, 3, 1, 3, 5, '2022-12-05 19:07:47'),
 (4, 1, 5, 1, 5, '2022-12-05 19:45:51');
 
 -- --------------------------------------------------------
@@ -357,12 +390,12 @@ INSERT INTO `ratings` (`id`, `article_id`, `user_id`, `rate_val`, `rate_base`, `
 
 DROP TABLE IF EXISTS `save_list`;
 CREATE TABLE IF NOT EXISTS `save_list` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `art_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `created_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `id` int NOT NULL AUTO_INCREMENT,
+  `art_id` int NOT NULL,
+  `user_id` int NOT NULL,
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `save_list`
@@ -381,7 +414,7 @@ INSERT INTO `save_list` (`id`, `art_id`, `user_id`, `created_at`) VALUES
 
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE IF NOT EXISTS `users` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `oauth_uid` varchar(50) NOT NULL,
   `reference_id` varchar(50) NOT NULL,
   `user_role` varchar(10) NOT NULL,

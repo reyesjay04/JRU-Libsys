@@ -6,8 +6,12 @@ $arr = array();
 
 if($_POST['action'] == "Yes") {
     $dislikesCount = DislikeArticle($_POST['art_id']);
+    AddNotification("DISLIKE", $_POST['art_id']);
+
 } else {
     $dislikesCount = UndislikeArticle($_POST['art_id']);
+    AddNotification("UNDISLIKE", $_POST['art_id']);
+
 }
 
 $likesCount = GetArticleLikes($_POST['art_id']);
