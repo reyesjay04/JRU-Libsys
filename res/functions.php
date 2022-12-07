@@ -1200,4 +1200,44 @@ function time_since($since) {
 }
 #endregion
 
+#region Dashboard
+function GetDashTotals() {
+    require_once("connection.php");
+    $pdo = Database::getConnection();
+
+    $response = array();
+
+    $stmt = $pdo->prepare("SELECT COUNT(id) as PendingPost FROM articles WHERE status = 'N'");
+    $stmt->execute(); 
+    $PendingPost = $stmt->fetchcolumn();
+
+    $stmt = $pdo->prepare("SELECT COUNT(id) as TotalLikes FROM no_likes");
+    $stmt->execute(); 
+    $TotalLikes = $stmt->fetchcolumn();
+
+    $stmt = $pdo->prepare("SELECT COUNT(id) as TotalDislikes FROM dislikes");
+    $stmt->execute(); 
+    $TotalDislikes = $stmt->fetchcolumn();
+
+    $stmt = $pdo->prepare("SELECT (COUNT(id) / DATEDIFF(CURRENT_DATE(), (SELECT created_at FROM articles order by created_at desc limit 1))) AS days FROM articles");
+    $stmt->execute(); 
+    $AveratePostRate = $stmt->fetchcolumn();
+
+    $stmt = $pdo->prepare("SELECT SUM(view_count) FROM articles");
+    $stmt->execute(); 
+    $PostViews = $stmt->fetchcolumn();
+
+    $response[] = array(
+        "totalpending" => $PendingPost,
+        "totallikes" => $TotalLikes,
+        "totaldislikes" => $TotalDislikes,
+        "averagerate" => $AveratePostRate,
+        "totalpostviews" => $PostViews,
+        "totalcitations" => 0,
+    );
+    
+    return $response;
+
+}
+#endregion
 ?>

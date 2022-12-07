@@ -76,6 +76,10 @@ if(isset($_GET['login'])) {
 
     include 'addannouncement.php';
 
+} else if(isset($_GET['getdashdetails']))  { 
+
+    include 'getdashdetails.php';
+
 }
 
 

@@ -47,7 +47,7 @@
                 echo 'active';
               }
             ?> ">
-              <i class="nav-icon fas fa-horn-alt"></i>
+              <i class="nav-icon fas fa-bullhorn"></i>
               <p>
                 Announcements
               </p>
@@ -152,7 +152,7 @@
                 echo 'active';
               }
             ?> ">
-              <i class="nav-icon fas fa-tree"></i>
+              <i class="nav-icon fas fa-users"></i>
               <p>
                 Educators
               </p>
@@ -164,53 +164,25 @@
                 echo 'active';
               }
             ?> ">
-              <i class="nav-icon fas fa-tree"></i>
+              <i class="nav-icon fas fa-users"></i>
               <p>
                 Departments
               </p>
             </a>
           </li>
           <li class="nav-item">
-            <a href="#" class="nav-link">
+            <a href="?engagements" class="nav-link <?php 
+              if( $_SERVER['REQUEST_URI'] == $LIB_SYS_DIR.'admin/?engagements' ) {
+                echo 'active';
+              }
+            ?>">
               <i class="nav-icon fas fa-edit"></i>
               <p>
-                Comments/ Reactions
-                <!-- <i class="fas fa-angle-left right"></i> -->
+                Engagements
               </p>
             </a>
-            <!-- <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="pages/forms/general.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>General Elements</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="pages/forms/advanced.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Advanced Elements</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="pages/forms/editors.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Editors</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="pages/forms/validation.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Validation</p>
-                </a>
-              </li>
-            </ul> -->
-          </li>
-
-          
-          
+          </li>      
         </ul>
       </nav>
-      <!-- /.sidebar-menu -->
     </div>
-    <!-- /.sidebar -->
 </aside>

@@ -12,7 +12,7 @@ $primaryKey = 'id';
 $columns = array(
     array('db' => 'title', 'dt' => 0 ),
     array('db' => 'description', 'dt' => 1 ),
-    array('db' => 'attachment', 'dt' => 2 ),
+    array('db' => 'filename', 'dt' => 2 ),
     array('db' => 'created_at', 'dt' => 3 ),
     array(
             'db' => 'id', 

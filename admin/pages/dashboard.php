@@ -30,23 +30,23 @@
 
             <div class="small-box bg-info">
               <div class="inner">
-                <h3>150</h3>
+                <h3 id="totalpending">0</h3>
                 <p>Pending Post</p>
               </div>
-              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              <!-- <a href="?pendingpost" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a> -->
             </div>
           </div>
 
           <div class="col-lg-6 col-6">
             <div class="small-box bg-success">
               <div class="inner">
-                <h3>53</h3>
+                <h3 id="totallikes">0</h3>
                 <p>Number of Likes</p>
               </div>
               <div class="icon">
                 <i class="ion ion-stats-bars"></i>
               </div>
-              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              <!-- <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a> -->
             </div>
           </div>
 
@@ -57,14 +57,14 @@
               <!-- small box -->
               <div class="small-box bg-warning">
                 <div class="inner">
-                  <h3>44</h3>
+                  <h3 id="totaldislikes">0</h3>
 
                   <p>Number of Dislikes</p>
                 </div>
                 <div class="icon">
                   <i class="ion ion-person-add"></i>
                 </div>
-                <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                <!-- <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a> -->
               </div>
             </div>
             <!-- ./col -->
@@ -72,37 +72,37 @@
               <!-- small box -->
               <div class="small-box bg-danger">
                 <div class="inner">
-                  <h3>65</h3>
+                  <h3 id="averagerate">0</h3>
 
                   <p>Average rate of posting</p>
                 </div>
                 <div class="icon">
                   <i class="ion ion-pie-graph"></i>
                 </div>
-                <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                <!-- <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a> -->
               </div>
             </div>
           <div class="col-lg-3 col-6">
 
             <div class="small-box bg-muted">
               <div class="inner">
-                <h3>150</h3>
+                <h3 id="totalpostviews">150</h3>
                 <p>Number of Post Views</p>
               </div>
-              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              <!-- <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a> -->
             </div>
           </div>
 
           <div class="col-lg-3 col-6">
             <div class="small-box bg-secondary">
               <div class="inner">
-                <h3>53</h3>
+                <h3 id="totalcitations">0</h3>
                 <p>Number of citations</p>
               </div>
               <div class="icon">
                 <i class="ion ion-stats-bars"></i>
               </div>
-              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              <!-- <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a> -->
             </div>
           </div>
         </div>
@@ -151,6 +151,7 @@
                             <th>Pending Post</th>
                             <th>Total Likes</th>    
                             <th>Total Dislikes</th>
+                            <th>Total Ratings</th>
                             <th>View Count</th>
                           </tr>
                         </thead>
@@ -162,6 +163,7 @@
                             <th>Pending Post</th>
                             <th>Total Likes</th>    
                             <th>Total Dislikes</th>
+                            <th>Total Ratings</th>
                             <th>View Count</th>
                           </tr>
                         </tfoot>
@@ -184,6 +186,7 @@
 $( document ).ready(function() {
   LoadDatatable(0);
   LoadDepartments();
+  DashSummary();
 });
 
 function LoadDatatable(id) {
@@ -209,8 +212,8 @@ function LoadDatatable(id) {
         targets: 0,
       },
       { visible: false, targets: [1] },
-      { "width": "5%", "targets":4 }, 
-      { "width": "5%", "targets":5 },
+      { "width": "10%", "targets":6 }, 
+      { "width": "10%", "targets":7 },
 
     ]
 
@@ -233,6 +236,22 @@ function LoadDepartments() {
             var name = response[i]['Name']; 
             $("#dept").append("<option value='"+code+"'>"+name+"</option>");           
         }
+      }
+    });
+}
+
+function DashSummary() {
+  
+  $.ajax({
+      url: 'actions/?getdashdetails',
+      dataType: 'json',
+      success:function(response){     
+        $("#totalpending").text(response[0]['totalpending']);
+        $("#totallikes").text(response[0]['totallikes']);
+        $("#totaldislikes").text(response[0]['totaldislikes']);
+        $("#averagerate").text(response[0]['averagerate']);
+        $("#totalpostviews").text(response[0]['totalpostviews']);
+        $("#totalcitations").text(response[0]['totalcitations']);
       }
     });
 }

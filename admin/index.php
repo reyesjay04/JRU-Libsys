@@ -43,6 +43,9 @@ if(isset($_SESSION['ADMIN_USER'])) {
         case $LIB_SYS_DIR.'admin/?announcements':
             include 'pages/announcements.php';
         break;
+        case $LIB_SYS_DIR.'admin/?engagements':
+            include 'pages/engagements.php'; 
+        break;
         default:
             include 'pages/dashboard.php';
     }
