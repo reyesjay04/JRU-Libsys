@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 06, 2022 at 02:57 PM
+-- Generation Time: Dec 08, 2022 at 12:34 AM
 -- Server version: 8.0.19
 -- PHP Version: 8.1.6
 
@@ -103,7 +103,7 @@ CREATE TABLE IF NOT EXISTS `articles` (
 --
 
 INSERT INTO `articles` (`id`, `title`, `dept_code`, `cat_code`, `content`, `file`, `availability`, `view_count`, `download_count`, `main_author_id`, `keyword`, `created_at`, `updated_at`, `status`) VALUES
-(1, 'VB.net', 'CSE', 'BSCpE', 'VB.Net is a simple, modern, object-oriented computer programming language developed by Microsoft to combine the power of .NET Framework and the common language runtime with the productivity benefits that are the hallmark of Visual Basic. This tutorial will teach you basic VB.Net programming and will also take you through various advanced concepts related to VB.Net programming language.', 'boxed-bg638da52e9c1a2.jpg', 'PUB', 87, 0, 5, 'vb', '2022-12-05 16:00:46', '2022-12-05 16:01:05', 'Y'),
+(1, 'VB.net', 'CSE', 'BSCpE', 'VB.Net is a simple, modern, object-oriented computer programming language developed by Microsoft to combine the power of .NET Framework and the common language runtime with the productivity benefits that are the hallmark of Visual Basic. This tutorial will teach you basic VB.Net programming and will also take you through various advanced concepts related to VB.Net programming language.', 'boxed-bg638da52e9c1a2.jpg', 'PUB', 88, 0, 5, 'vb', '2022-12-05 16:00:46', '2022-12-05 16:01:05', 'Y'),
 (2, 'PHP', 'CSE', 'BSCpE', 'ca', 'avatar5638dc5afdc129.png', 'PUB', 68, 0, 1, 'php', '2022-12-05 18:19:27', '2022-12-05 18:19:35', 'Y'),
 (3, 'Private Sample', 'AEP', 'BSED', 'Private Sample', 'avatar5638dc9881c8ed.png', 'PRIV', 36, 0, 1, 'Private Sample', '2022-12-05 18:35:52', '2022-12-05 18:36:46', 'Y');
 
@@ -283,7 +283,7 @@ CREATE TABLE IF NOT EXISTS `department` (
 --
 
 INSERT INTO `department` (`id`, `code`, `name`, `created_at`, `created_by`, `updated_at`, `updated_by`, `status`) VALUES
-(1, 'AEP', 'PROGRAMS UNDER THE COLLEGE OF LIBERAL ARTS, EDUCATION, & PSYCHOLOGY', '2022-11-20 17:22:32', 'admin', '2022-11-20 20:07:22', 'admin', 'Y'),
+(1, 'AEP', 'PROGRAMS UNDER THE COLLEGE OF LIBERAL ARTS, EDUCATION, & PSYCHOLOGY', '2022-11-20 17:22:32', 'admin', '2022-12-07 21:33:41', 'admin', 'Y'),
 (2, 'BAA', 'PROGRAMS UNDER THE COLLEGE OF BUSINESS ADMINISTRATION & ACCOUNTANCY', '2022-11-20 19:42:50', 'admin', '2022-11-21 21:52:53', 'admin', 'Y'),
 (3, 'CSE', 'PROGRAMS UNDER THE COLLEGE OF COMPUTER STUDIES & ENGINEERING', '2022-11-20 19:54:13', 'admin', '0000-00-00 00:00:00', '', 'Y');
 
