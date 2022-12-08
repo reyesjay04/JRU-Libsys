@@ -86,7 +86,7 @@
 
             <div class="small-box bg-muted">
               <div class="inner">
-                <h3 id="totalpostviews">150</h3>
+                <h3 id="totalpostviews">0</h3>
                 <p>Number of Post Views</p>
               </div>
               <!-- <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a> -->
@@ -152,7 +152,7 @@
                             <th>Total Likes</th>    
                             <th>Total Dislikes</th>
                             <th>Total Ratings</th>
-                            <th>View Count</th>
+                            <th>Action</th>
                           </tr>
                         </thead>
                         <tfoot>
@@ -164,7 +164,7 @@
                             <th>Total Likes</th>    
                             <th>Total Dislikes</th>
                             <th>Total Ratings</th>
-                            <th>View Count</th>
+                            <th>Action</th>
                           </tr>
                         </tfoot>
                       </table>
@@ -181,6 +181,8 @@
 </div>
 
 <?php include '../templates/admin-footer.php';?>
+<?php include 'modals/view-count-modal.php';?>
+
 
 <script>
 $( document ).ready(function() {
@@ -213,7 +215,7 @@ function LoadDatatable(id) {
       },
       { visible: false, targets: [1] },
       { "width": "10%", "targets":6 }, 
-      { "width": "10%", "targets":7 },
+      { "width": "5%", "targets":7 },
 
     ]
 
@@ -254,6 +256,21 @@ function DashSummary() {
         $("#totalcitations").text(response[0]['totalcitations']);
       }
     });
+}
+
+function viewcount(id) {
+  $.ajax({  
+
+    url:"actions/?getcount",  
+    method:"post",  
+    data:{id:id},  
+
+    success:function(data){  
+      $('#view-count').html(data);  
+      $('#modal-view-count').modal("show");
+    }
+
+  });
 }
 </script>
 </body>

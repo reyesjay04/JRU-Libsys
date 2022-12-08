@@ -92,10 +92,11 @@ $result = GetUserStudentProfileForForm($_SESSION['USER_ID']);
                   <div class="card-body">
                     <div class="tab-content">
                       <div class="tab-pane active" id="statistics">
-                        
+                        <div id="chart">
+                        </div>
                       </div>
                       <div class="tab-pane" id="savedlist">
-                        
+              
                       </div>
                       <div class="tab-pane" id="request">
                         
@@ -192,6 +193,7 @@ $result = GetUserStudentProfileForForm($_SESSION['USER_ID']);
   </footer>
 </div>
 <?php include '../templates/user-footer.php'?>
+<?php include 'apex/statistics.php'?>
 <script>
 $(function () {
   bsCustomFileInput.init();
@@ -203,6 +205,7 @@ $( document ).ready(function() {
     getsavedarticles();
     LoadDepartments();
     getrequestlist();
+    GetChartData();
     $("#dept").change(function() {
         var dept_code = $("#dept").val();
         LoadCourse(dept_code);
@@ -309,6 +312,56 @@ function LoadCourse(dept_code) {
         $("#course").val("<?php echo  $result[0]['course'];?>");
       }
     });
+}
+
+
+function GetChartData() {
+  $.ajax({
+      url: 'actions/?getchartdata',
+      dataType: 'json',
+      method:"POST",
+      success:function(response){     
+        var len = response.length;
+        var Dates = [];
+        var Likes = [];
+        var Dislikes = [];
+        var Comments = [];
+        var Views = [];
+ 
+        for( var i = 0; i<len; i++){
+          Dates.push(response[i]['date']);
+          Likes.push(response[i]['likes']);
+          Dislikes.push(response[i]['dislikes']);
+          Comments.push(response[i]['comments']);
+          Views.push(response[i]['views']);
+        }
+        chart.updateOptions({
+          xaxis: {
+            categories: Dates
+          },
+          series: [
+            {
+            name: 'Total Likes',
+            data: Likes
+            }, 
+            {
+            name: 'Total Dislikes',
+            data: Dislikes
+            },
+            {
+            name: 'Total Comments',
+            data: Comments
+            }, 
+            {
+            name: 'Total Views',
+            data: Views
+            }, 
+          ],
+        })
+      }
+    });
+
+
 }
 </script>
 </body>

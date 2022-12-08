@@ -80,6 +80,10 @@ if(isset($_GET['login'])) {
 
     include 'getdashdetails.php';
 
+} else if(isset($_GET['getcount']))  { 
+
+    include 'getcount.php';
+
 }
 
 

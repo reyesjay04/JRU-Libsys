@@ -66,15 +66,25 @@ $result = RetrieveAnnouncement();
                   Announcement
                 </h3>
               </div>
-              <div class="card-body">
-                
+              <div class="card-body">      
                 <blockquote>
                   <p>Title: <?php echo $result[0]['title']?></p>
-                  <p><?php echo $result[0]['description']?></p>
+                  <p><?php 
+
+                  if (strlen($result[0]['description']) > 150) {
+                    echo substr($str, 0, 150) . '...';
+                  } else {
+                    echo $result[0]['description'];
+                  }
+                    
+                  ?></p>
                 </blockquote>
                 <div class="attachment-block clearfix">
                   <a type="button" id="<?php echo $result[0]['filename']?>" onclick="downloadFile(this.id)" class="link-black text-sm"><i class="fas fa-link mr-1"></i><?php echo $result[0]['filename']?></a>
                 </div>
+              </div>
+              <div class="card-footer">
+              <button type="button" onclick="announcement()" class="btn btn-block bg-gradient-info btn-sm">More Info</button>
               </div>
             </div>
             <div class="card">
@@ -123,6 +133,7 @@ $result = RetrieveAnnouncement();
   </footer>
 </div>
 <?php include '../templates/user-footer.php'?>
+<?php include 'modals/view-announcement.php'?>
 <script>
 
 
@@ -249,6 +260,20 @@ function GetTotalPostandReads() {
 
 function downloadFile(id) {
   window.open("actions/?dlfileann="+id, '_blank');
+}
+
+function announcement() {
+  $.ajax({
+      url:"actions/?view-announcement",
+      method:"POST",
+      success:function(data){
+        $('#announcement').html(data);  
+        $('#modal-view-announcement').modal("show");
+        // $("#announcement").text(data[0]['totalpost']);
+        // $("#totalreads").text(data[0]['totalreads']);
+      }
+
+  });
 }
 </script>
 </body>

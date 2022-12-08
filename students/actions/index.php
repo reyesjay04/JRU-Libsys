@@ -122,7 +122,14 @@ if(isset($_GET['getdept'])) {
     
     include 'seennotif.php';
 
-}
+} else if(isset($_GET['view-announcement'])) {
+    
+    include 'view-announcement.php';
 
+} else if(isset($_GET['getchartdata'])) {
+    
+    include 'getchartdata.php';
+
+}
 
 ?>

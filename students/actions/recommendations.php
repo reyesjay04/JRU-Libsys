@@ -16,7 +16,6 @@ foreach($article as $prop){
         "content" => $prop['content'],
         "file" => $prop['file'],
         "availability" => $prop['availability'],
-        "view_count" => $prop['view_count'],
         "main_author" => GetUserFullName($prop['main_author_id']),
         "keyword" => $prop['keyword'],
         "created_at" => $prop['created_at'],

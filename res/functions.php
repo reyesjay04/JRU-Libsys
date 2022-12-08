@@ -806,8 +806,8 @@ function GetUserArticleRating($art_id) {
 function UpdateArticleViewCount($art_id) {
     require_once("connection.php");
     $pdo = Database::getConnection(); 
-    $stmt = $pdo->prepare("UPDATE `articles` SET view_count = (view_count + 1) WHERE id = :art_id");
-    $stmt->execute(["art_id" => $art_id]);
+    $stmt = $pdo->prepare("INSERT INTO `article_views` (`article_id`, `user_id`, `created_at`) VALUES (:art_id, :user_id, :created_at)");
+    $stmt->execute(["art_id" => $art_id, "user_id" => $_SESSION['USER_ID'], "created_at" => FullDateFormat24HR()]);
 }
 #endregion
 
@@ -992,6 +992,76 @@ function AcceptRequest($user_id, $art_id) {
     $stmt->execute(['art_id' => $art_id, "user_id" => $user_id]); 
 
 }
+
+function getDatesFromRange($start, $end, $format = 'Y-m-d') {
+      
+    // Declare an empty array
+    $array = array();
+      
+    // Variable that store the date interval
+    // of period 1 day
+    $interval = new DateInterval('P1D');
+  
+    $realEnd = new DateTime($end);
+    $realEnd->add($interval);
+  
+    $period = new DatePeriod(new DateTime($start), $interval, $realEnd);
+  
+    // Use loop to store date into array
+    foreach($period as $date) {                 
+        $array[] = $date->format($format); 
+    }
+  
+    // Return the array elements
+    return $array;
+}
+
+function GetChartData($user_id) {
+    require_once("connection.php");
+    $pdo = Database::getConnection();  
+
+
+    $dateRange = getDatesFromRange(date('Y-m-d', strtotime('-6 days')), date("Y-m-d"));
+
+    $response = array();
+    foreach($dateRange as $dates){
+        
+        $date = date_create($dates);
+
+        $stmt = $pdo->prepare("SELECT COUNT(nl.id) as LIKES FROM author_list au 
+                                LEFT JOIN articles art ON art.id = au.art_id LEFT JOIN no_likes nl ON nl.article_id = art.id
+                                WHERE au.user_id = :user_id AND DATE(nl.created_at) = :created_at");
+        $stmt->execute(["created_at" => $dates, "user_id" => $user_id]); 
+        $TotalLikes = $stmt->fetchcolumn();
+    
+        $stmt = $pdo->prepare("SELECT COUNT(dl.id) as TotalDislikes FROM author_list au 
+                                LEFT JOIN articles art ON art.id = au.art_id LEFT JOIN dislikes dl ON dl.article_id = art.id
+                                WHERE au.user_id = :user_id  AND DATE(dl.created_at) = :created_at");
+        $stmt->execute(["created_at" => $dates, "user_id" => $user_id]); 
+        $TotalDislikes = $stmt->fetchcolumn();
+    
+        $stmt = $pdo->prepare("SELECT COUNT(com.id) as TotalComments FROM author_list au 
+                                LEFT JOIN articles art ON art.id = au.art_id LEFT JOIN comments com ON com.article_id = art.id
+                                WHERE au.user_id = :user_id  AND DATE(com.created_at) = :created_at");
+        $stmt->execute(["created_at" => $dates, "user_id" => $user_id]); 
+        $TotalComments = $stmt->fetchcolumn();
+    
+        $stmt = $pdo->prepare("SELECT COUNT(art.article_id) as TotalViews FROM author_list au 
+                                LEFT JOIN article_views art ON art.article_id = au.art_id 
+                                WHERE au.user_id = :user_id  AND DATE(art.created_at) = :created_at ");
+        $stmt->execute(["created_at" => $dates, "user_id" => $user_id]); 
+        $TotalViews = $stmt->fetchcolumn();
+
+        $response[] = array(
+            "date" => date_format($date,"M d, Y"),
+            "likes" => $TotalLikes,
+            "dislikes" => $TotalDislikes,
+            "comments" => $TotalComments,
+            "views" => ($TotalViews == null ? 0 : $TotalViews),
+        );
+    }
+    return $response;
+}
 #endregion
 
 #region SaveList
@@ -1014,23 +1084,40 @@ function SaveArticle($art_id) {
 
 }
 
-function GetPostandReads() {
+function GetTotalReads($art_id) {
+
+    require_once("connection.php");
+    $pdo = Database::getConnection();
+   
+    $sql = "SELECT COUNT(id) as ViewCount FROM article_views WHERE article_id = :art_id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute(["art_id" => $art_id]);
+    $data = $stmt->fetchcolumn(); 
+    return $data;
+}
+
+function GetPostandReads($user_id) {
     require_once("connection.php");
     $pdo = Database::getConnection();
 
-    $sql = "SELECT COUNT(id) as totalpost, SUM(view_count) as totalreads FROM articles WHERE main_author_id = :user_id AND status = 'Y'";
-
+    $sql = "SELECT art.id as ArticleID FROM articles art WHERE art.main_author_id = :user_id";
     $stmt = $pdo->prepare($sql);
-    $stmt->execute(["user_id" => $_SESSION['USER_ID']]);
+    $stmt->execute(["user_id" => $user_id]);
     $data = $stmt->fetchAll();
     $response = array();
+
+    $totalPost = 0;
+    $totalReads = 0;
     foreach($data as $profile){
-        
-        $response[] = array(
-            "totalpost" => $profile['totalpost'],
-            "totalreads" => $profile['totalreads'],
-        );
+        $totalPost += 1;
+        $totalReads += GetTotalReads($profile['ArticleID']);
     }
+
+    $response[] = array(
+        "totalpost" => $totalPost,
+        "totalreads" => $totalReads,
+    );
+
     return $response;
 
 }
@@ -1098,8 +1185,29 @@ function RetrieveAnnouncement() {
         );
     }
     return $response;
+    
 }
 
+function ViewAnnouncement() {
+    require_once("connection.php");
+    $pdo = Database::getConnection();
+
+    $newData = [];
+
+    $stmt = $pdo->prepare("SELECT * FROM `announcement`");
+    $stmt->execute(); 
+    $row = $stmt->fetch();
+
+    $newData = [
+        "title" => $row['title'],
+        "description" => $row['description'],
+        "filename" => $row['filename'],
+        "created_at" => $row['created_at'],    
+    ];
+
+    $stmt->closeCursor();
+    return $newData;
+}
 #endregion
 #region Recommendation
 function Recommendations() {
@@ -1223,7 +1331,7 @@ function GetDashTotals() {
     $stmt->execute(); 
     $AveratePostRate = $stmt->fetchcolumn();
 
-    $stmt = $pdo->prepare("SELECT SUM(view_count) FROM articles");
+    $stmt = $pdo->prepare("SELECT COUNT(id) FROM article_views");
     $stmt->execute(); 
     $PostViews = $stmt->fetchcolumn();
 
@@ -1231,7 +1339,7 @@ function GetDashTotals() {
         "totalpending" => $PendingPost,
         "totallikes" => $TotalLikes,
         "totaldislikes" => $TotalDislikes,
-        "averagerate" => $AveratePostRate,
+        "averagerate" => $AveratePostRate == null ? 0 : $AveratePostRate,
         "totalpostviews" => $PostViews,
         "totalcitations" => 0,
     );

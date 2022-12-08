@@ -22,7 +22,14 @@ $columns = array(
     array('db' => '(SELECT COUNT(article_id) FROM no_likes WHERE user_id = u.id) as Likes', 'dt' => 4 , 'field' => 'Likes'),
     array('db' => '(SELECT COUNT(article_id) FROM dislikes WHERE user_id = u.id) as Dislikes', 'dt' => 5 , 'field' => 'Dislikes'),
     array('db' => '(SELECT (SUM(rt.rate_val) / SUM(rt.rate_base) * 5) as Rate FROM ratings rt WHERE rt.user_id = u.id) as Ratings', 'dt' => 6 , 'field' => 'Ratings'),
-    array('db' => 'SUM(artall.view_count) As ViewCount', 'dt' => 7 , 'field' => 'ViewCount'),
+    array(
+        'db' => 'u.id', 
+        'dt' => 7,
+        'field' => 'id' ,
+        'formatter' => function( $d, $row ){ 
+            return ('<div class="btn-group"><button type="button" class="btn btn-secondary" id='.$d.' onclick="viewcount(this.id)">View</button>');
+        }
+    )
 );
 
 $joinQuery = "FROM users u LEFT JOIN author_list aul ON aul.user_id = u.id 

@@ -18,7 +18,6 @@ foreach($articleList as $article){
         "content" => $article['content'],
         "file" => $article['file'],
         "availability" => $article['availability'],
-        "view_count" => $article['view_count'],
         "main_author" => GetUserFullName($article['main_author_id']),
         "keyword" => $article['keyword'],
         "created_at" => $article['created_at'],
