@@ -90,7 +90,8 @@ $result = GetUserStudentProfile($_GET['profile']);
                   <div class="card-body">
                     <div class="tab-content">
                       <div class="tab-pane active" id="statistics">
-
+                        <div id="chart">
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -109,12 +110,14 @@ $result = GetUserStudentProfile($_GET['profile']);
   </footer>
 </div>
 <?php include '../templates/user-footer.php'?>
+<?php include 'apex/statistics.php'?>
 <script>
 
 
 $( document ).ready(function() {
     // GetArticle();
     // getuserprofile();
+    GetChartData();
 });
 
 
@@ -159,6 +162,55 @@ function getuserprofile() {
   });
 }
 
+function GetChartData() {
+  $.ajax({
+      url: 'actions/?getchartdataothers',
+      dataType: 'json',
+      method:"POST",
+      data: {id:<?php echo $_GET['profile']?>},
+      success:function(response){     
+        var len = response.length;
+        var Dates = [];
+        var Likes = [];
+        var Dislikes = [];
+        var Comments = [];
+        var Views = [];
+ 
+        for( var i = 0; i<len; i++){
+          Dates.push(response[i]['date']);
+          Likes.push(response[i]['likes']);
+          Dislikes.push(response[i]['dislikes']);
+          Comments.push(response[i]['comments']);
+          Views.push(response[i]['views']);
+        }
+        chart.updateOptions({
+          xaxis: {
+            categories: Dates
+          },
+          series: [
+            {
+            name: 'Total Likes',
+            data: Likes
+            }, 
+            {
+            name: 'Total Dislikes',
+            data: Dislikes
+            },
+            {
+            name: 'Total Comments',
+            data: Comments
+            }, 
+            {
+            name: 'Total Views',
+            data: Views
+            }, 
+          ],
+        })
+      }
+    });
+
+
+}
 </script>
 </body>
 </html>

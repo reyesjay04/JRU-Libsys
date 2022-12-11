@@ -43,7 +43,7 @@ foreach($data as $notif){
 ?>
     <div class="dropdown-divider"></div>
     <a href="#" id="<?php echo $notif['id']?>" onclick="seennotif(this.id)" class="dropdown-item">
-        <i class="<?php echo $icon;?> mr-2"></i> <?php echo $notif['TotalNotif']; ?> new <?php echo $str; ?>
+        <i class="<?php echo $icon;?> mr-2"></i> 1 new <?php echo $str; ?>
         <span class="float-right text-muted text-sm"><?php echo $interval;?> ago</span>
     </a>
 <?php

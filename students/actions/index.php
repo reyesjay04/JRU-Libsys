@@ -130,6 +130,12 @@ if(isset($_GET['getdept'])) {
     
     include 'getchartdata.php';
 
+} else if(isset($_GET['getchartdataothers'])) {
+    
+    include 'getchartdataothers.php';
+
 }
+
+
 
 ?>

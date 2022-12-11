@@ -567,7 +567,7 @@ function AddAuthorList($pdo, $art_id, $authorList, $main_author) {
          $pdo->commit();
     }
 
-    AddNotification("NEW ARTICLE", $art_id);
+    AddNotification("ARTICLE", $art_id);
  
 }
 

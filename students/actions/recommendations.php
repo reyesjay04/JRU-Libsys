@@ -31,7 +31,7 @@ foreach($responselist as $response){
     if($_POST['viewarticle'] !== $response['art_id']) {
 
     ?>
-        <div class="col-3">
+        <div class="col-md-3">
             <div class="info-box bg-light">
                 <div class="info-box-content">
                 <span class="info-box-number text-center"><?php echo $response['title']; ?></span>

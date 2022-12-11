@@ -46,20 +46,7 @@ $result = RetrieveAnnouncement();
           </div>
         </div>
         <div class="row">   
-          <div class="col-md-8">
-            <div class="card">
-              <div class="card-header">
-                <h3 class="card-title">Post Details</h3>
-              </div>
-              <div class="card-body">
-                <div class="tab-content">
-                  <div class="active tab-pane" id="articles">            
-                  </div>
-                </div>
-              </div>     
-            </div>
-          </div>
-          <div class="col-4">
+          <div class="col-md-4">
             <div class="card">
               <div class="card-header">
                 <h3 class="card-title">
@@ -122,6 +109,20 @@ $result = RetrieveAnnouncement();
               </div>
             </div>
           </div>
+          <div class="col-md-8">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Post Details</h3>
+              </div>
+              <div class="card-body">
+                <div class="tab-content">
+                  <div class="active tab-pane" id="articles">            
+                  </div>
+                </div>
+              </div>     
+            </div>
+          </div>
+
         </div>
       </div>
     </div>

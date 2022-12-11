@@ -87,10 +87,10 @@ function seennotif(id) {
     });
 }
 
-// setInterval(function(){
-//     countNewNotif();
-//     checkUnseenNotif();
-// }, 3000);
+setInterval(function(){
+    countNewNotif();
+    checkUnseenNotif();
+}, 3000);
 
 
 </script>

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 08, 2022 at 11:55 AM
+-- Generation Time: Dec 11, 2022 at 07:22 AM
 -- Server version: 10.4.13-MariaDB
 -- PHP Version: 7.4.7
 
@@ -142,7 +142,7 @@ CREATE TABLE IF NOT EXISTS `article_views` (
   `user_id` int(11) NOT NULL,
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `article_views`
@@ -158,7 +158,11 @@ INSERT INTO `article_views` (`id`, `article_id`, `user_id`, `created_at`) VALUES
 (7, 1, 1, '2022-12-08 17:38:51'),
 (8, 1, 1, '2022-12-08 18:06:40'),
 (9, 2, 1, '2022-12-08 18:06:49'),
-(10, 3, 5, '2022-12-08 18:54:29');
+(10, 3, 5, '2022-12-08 18:54:29'),
+(11, 3, 1, '2022-12-08 22:24:37'),
+(12, 4, 1, '2022-12-08 22:24:40'),
+(13, 4, 1, '2022-12-08 22:25:24'),
+(14, 4, 1, '2022-12-08 22:26:01');
 
 -- --------------------------------------------------------
 
@@ -370,10 +374,10 @@ CREATE TABLE IF NOT EXISTS `notification` (
 --
 
 INSERT INTO `notification` (`id`, `type`, `to_user_id`, `from_user_id`, `created_at`, `status`) VALUES
-(1, 'LIKE', 1, 5, '2022-12-06 21:56:58', 'Y'),
+(1, 'LIKE', 1, 5, '2022-12-08 22:27:05', 'Y'),
 (2, 'LIKE', 5, 1, '2022-12-06 21:38:34', 'N'),
-(3, 'NEW ARTICLE', 1, 5, '2022-12-08 16:02:02', 'N'),
-(4, 'LIKE', 1, 5, '2022-12-08 16:02:49', 'N');
+(3, 'ARTICLE', 1, 5, '2022-12-08 22:31:17', 'N'),
+(4, 'LIKE', 1, 5, '2022-12-08 22:28:23', 'Y');
 
 -- --------------------------------------------------------
 
